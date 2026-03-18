@@ -24,13 +24,11 @@ final class TranslatorFallbackLocalesPass implements CompilerPassInterface
         try {
             $symfonyTranslator = $container->findDefinition('translator.default');
             $syliusTranslator = $container->findDefinition(Translator::class);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 
-        $methodCalls = array_filter($symfonyTranslator->getMethodCalls(), static function (array $methodCall): bool {
-            return 'setFallbackLocales' === $methodCall[0];
-        });
+        $methodCalls = array_filter($symfonyTranslator->getMethodCalls(), static fn(array $methodCall): bool => 'setFallbackLocales' === $methodCall[0]);
 
         foreach ($methodCalls as $methodCall) {
             $syliusTranslator->addMethodCall($methodCall[0], $methodCall[1]);

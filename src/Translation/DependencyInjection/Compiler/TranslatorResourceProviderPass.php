@@ -26,7 +26,7 @@ final class TranslatorResourceProviderPass implements CompilerPassInterface
         try {
             $symfonyTranslator = $container->findDefinition('translator.default');
             $syliusResourceProvider = $container->findDefinition(SymfonyTranslatorResourceProvider::class);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 
@@ -46,14 +46,14 @@ final class TranslatorResourceProviderPass implements CompilerPassInterface
             if (!is_array($options) || !isset($options['resource_files'])) {
                 $options = $symfonyTranslator->getArgument(4);
             }
-        } catch (OutOfBoundsException $exception) {
+        } catch (OutOfBoundsException) {
             $options = [];
         }
 
         $languagesFiles = isset($options['resource_files']) && is_iterable($options['resource_files']) ? $options['resource_files'] : [];
 
         $resourceFiles = [];
-        foreach ($languagesFiles as $language => $files) {
+        foreach ($languagesFiles as $files) {
             foreach ($files as $file) {
                 $resourceFiles[] = $file;
             }

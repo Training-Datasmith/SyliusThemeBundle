@@ -19,13 +19,10 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 final class OutputAwareAssetsInstaller implements AssetsInstallerInterface, OutputAwareInterface
 {
-    private AssetsInstallerInterface $assetsInstaller;
-
     private OutputInterface $output;
 
-    public function __construct(AssetsInstallerInterface $assetsInstaller)
+    public function __construct(private readonly AssetsInstallerInterface $assetsInstaller)
     {
-        $this->assetsInstaller = $assetsInstaller;
         $this->output = new NullOutput();
     }
 
@@ -68,16 +65,11 @@ final class OutputAwareAssetsInstaller implements AssetsInstallerInterface, Outp
                     return 'The assets were installed using relative symbolic links.';
             }
         }
-
-        switch ($symlinkMask + $effectiveSymlinkMask) {
-            case AssetsInstallerInterface::SYMLINK:
-            case AssetsInstallerInterface::RELATIVE_SYMLINK:
-                return 'It looks like your system doesn\'t support symbolic links, so the assets were copied.';
-            case AssetsInstallerInterface::RELATIVE_SYMLINK + AssetsInstallerInterface::SYMLINK:
-                return 'It looks like your system doesn\'t support relative symbolic links, so the assets were installed by using absolute symbolic links.';
-        }
-
-        return 'Something gone bad, can\'t provide the result of assets installing!';
+        return match ($symlinkMask + $effectiveSymlinkMask) {
+            AssetsInstallerInterface::SYMLINK, AssetsInstallerInterface::RELATIVE_SYMLINK => 'It looks like your system doesn\'t support symbolic links, so the assets were copied.',
+            AssetsInstallerInterface::RELATIVE_SYMLINK + AssetsInstallerInterface::SYMLINK => 'It looks like your system doesn\'t support relative symbolic links, so the assets were installed by using absolute symbolic links.',
+            default => 'Something gone bad, can\'t provide the result of assets installing!',
+        };
     }
 
     private function provideExpectationComment(int $symlinkMask): string

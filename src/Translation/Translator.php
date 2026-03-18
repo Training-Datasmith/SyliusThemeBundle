@@ -26,23 +26,16 @@ final class Translator extends BaseTranslator implements WarmableInterface
         'debug' => false,
     ];
 
-    private TranslatorLoaderProviderInterface $loaderProvider;
-
-    private TranslatorResourceProviderInterface $resourceProvider;
-
     private bool $resourcesLoaded = false;
 
     public function __construct(
-        TranslatorLoaderProviderInterface $loaderProvider,
-        TranslatorResourceProviderInterface $resourceProvider,
+        private readonly TranslatorLoaderProviderInterface $loaderProvider,
+        private readonly TranslatorResourceProviderInterface $resourceProvider,
         MessageFormatterInterface $messageFormatter,
         string $locale,
         array $options = [],
     ) {
         $this->assertOptionsAreKnown($options);
-
-        $this->loaderProvider = $loaderProvider;
-        $this->resourceProvider = $resourceProvider;
 
         $this->options = array_merge($this->options, $options);
         if (null !== $this->options['cache_dir'] && $this->options['debug']) {

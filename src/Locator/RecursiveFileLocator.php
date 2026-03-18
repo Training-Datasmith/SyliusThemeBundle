@@ -16,23 +16,14 @@ namespace Sylius\Bundle\ThemeBundle\Locator;
 use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class RecursiveFileLocator implements FileLocatorInterface
+final readonly class RecursiveFileLocator implements FileLocatorInterface
 {
-    private FinderFactoryInterface $finderFactory;
-
-    private array $paths;
-
-    private ?int $depth;
-
     /**
      * @param array|string[] $paths An array of paths where to look for resources
      * @param int|null $depth Restrict depth to search for configuration file inside theme folder
      */
-    public function __construct(FinderFactoryInterface $finderFactory, array $paths, ?int $depth = null)
+    public function __construct(private FinderFactoryInterface $finderFactory, private array $paths, private ?int $depth = null)
     {
-        $this->finderFactory = $finderFactory;
-        $this->paths = $paths;
-        $this->depth = $depth;
     }
 
     public function locateFileNamed(string $name): string
@@ -72,7 +63,7 @@ final class RecursiveFileLocator implements FileLocatorInterface
 
                     yield $file->getPathname();
                 }
-            } catch (\InvalidArgumentException $exception) {
+            } catch (\InvalidArgumentException) {
             }
         }
 

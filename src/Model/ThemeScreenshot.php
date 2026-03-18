@@ -15,15 +15,12 @@ namespace Sylius\Bundle\ThemeBundle\Model;
 
 final class ThemeScreenshot
 {
-    private string $path;
-
     private ?string $title = null;
 
     private ?string $description = null;
 
-    public function __construct(string $path)
+    public function __construct(private readonly string $path)
     {
-        $this->path = $path;
     }
 
     public function getPath(): string

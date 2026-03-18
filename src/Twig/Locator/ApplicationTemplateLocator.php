@@ -19,13 +19,10 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Handles paths like "template.html.twig" or "Directory/template.html.twig".
  */
-final class ApplicationTemplateLocator implements TemplateLocatorInterface
+final readonly class ApplicationTemplateLocator implements TemplateLocatorInterface
 {
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem)
+    public function __construct(private Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     public function locate(string $template, ThemeInterface $theme): string
@@ -40,6 +37,6 @@ final class ApplicationTemplateLocator implements TemplateLocatorInterface
 
     public function supports(string $template): bool
     {
-        return strpos($template, '@') !== 0;
+        return !str_starts_with($template, '@');
     }
 }

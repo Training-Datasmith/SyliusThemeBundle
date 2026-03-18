@@ -15,13 +15,10 @@ namespace Sylius\Bundle\ThemeBundle\Configuration\Filesystem;
 
 use Sylius\Bundle\ThemeBundle\Filesystem\FilesystemInterface;
 
-final class JsonFileConfigurationLoader implements ConfigurationLoaderInterface
+final readonly class JsonFileConfigurationLoader implements ConfigurationLoaderInterface
 {
-    private FilesystemInterface $filesystem;
-
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct(private FilesystemInterface $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     public function load(string $identifier): array

@@ -16,18 +16,10 @@ namespace Sylius\Bundle\ThemeBundle\Twig\Locator;
 use Sylius\Bundle\ThemeBundle\HierarchyProvider\ThemeHierarchyProviderInterface;
 use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
-final class HierarchicalTemplateLocator implements TemplateLocatorInterface
+final readonly class HierarchicalTemplateLocator implements TemplateLocatorInterface
 {
-    private TemplateLocatorInterface $templateLocator;
-
-    private ThemeHierarchyProviderInterface $themeHierarchyProvider;
-
-    public function __construct(
-        TemplateLocatorInterface $templateLocator,
-        ThemeHierarchyProviderInterface $themeHierarchyProvider,
-    ) {
-        $this->templateLocator = $templateLocator;
-        $this->themeHierarchyProvider = $themeHierarchyProvider;
+    public function __construct(private TemplateLocatorInterface $templateLocator, private ThemeHierarchyProviderInterface $themeHierarchyProvider)
+    {
     }
 
     public function locate(string $template, ThemeInterface $theme): string
@@ -36,7 +28,7 @@ final class HierarchicalTemplateLocator implements TemplateLocatorInterface
         foreach ($providedThemes as $providedTheme) {
             try {
                 return $this->templateLocator->locate($template, $providedTheme);
-            } catch (TemplateNotFoundException $exception) {
+            } catch (TemplateNotFoundException) {
                 // Ignore if resource cannot be found in given theme.
             }
         }

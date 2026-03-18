@@ -21,13 +21,10 @@ final class InMemoryThemeRepository implements ThemeRepositoryInterface
     /** @var ThemeInterface[] */
     private array $themes = [];
 
-    private ThemeLoaderInterface $themeLoader;
-
     private bool $themesLoaded = false;
 
-    public function __construct(ThemeLoaderInterface $themeLoader)
+    public function __construct(private readonly ThemeLoaderInterface $themeLoader)
     {
-        $this->themeLoader = $themeLoader;
     }
 
     public function findAll(): array

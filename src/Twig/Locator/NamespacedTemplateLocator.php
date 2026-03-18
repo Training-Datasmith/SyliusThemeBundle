@@ -19,13 +19,10 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Handles templates like "@Acme/template.html.twig".
  */
-final class NamespacedTemplateLocator implements TemplateLocatorInterface
+final readonly class NamespacedTemplateLocator implements TemplateLocatorInterface
 {
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem)
+    public function __construct(private Filesystem $filesystem)
     {
-        $this->filesystem = $filesystem;
     }
 
     public function locate(string $template, ThemeInterface $theme): string
@@ -46,19 +43,19 @@ final class NamespacedTemplateLocator implements TemplateLocatorInterface
 
     public function supports(string $template): bool
     {
-        return strpos($template, '@') === 0 && strpos($template, 'Resources/views/') === false;
+        return str_starts_with($template, '@') && !str_contains($template, 'Resources/views/');
     }
 
     private function assertResourcePathIsValid(string $template): void
     {
-        if (strpos($template, '..') !== false) {
+        if (str_contains($template, '..')) {
             throw new \InvalidArgumentException(sprintf('File name "%s" contains invalid characters (..).', $template));
         }
     }
 
     private function getBundleOrPluginName(string $twigNamespace): string
     {
-        if (substr($twigNamespace, -6) === 'Plugin') {
+        if (str_ends_with($twigNamespace, 'Plugin')) {
             return $twigNamespace;
         }
 

@@ -22,30 +22,18 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-final class AssetsInstaller implements AssetsInstallerInterface
+final readonly class AssetsInstaller implements AssetsInstallerInterface
 {
-    private Filesystem $filesystem;
-
     private KernelInterface $kernel;
 
-    private ThemeRepositoryInterface $themeRepository;
-
-    private PathResolverInterface $pathResolver;
-
-    private AssetsProviderInterface $assetsProvider;
-
     public function __construct(
-        Filesystem $filesystem,
+        private Filesystem $filesystem,
         KernelInterface $kernel,
-        ThemeRepositoryInterface $themeRepository,
-        PathResolverInterface $pathResolver,
-        AssetsProviderInterface $assetsProvider,
+        private ThemeRepositoryInterface $themeRepository,
+        private PathResolverInterface $pathResolver,
+        private AssetsProviderInterface $assetsProvider,
     ) {
-        $this->filesystem = $filesystem;
         $this->kernel = $kernel;
-        $this->themeRepository = $themeRepository;
-        $this->pathResolver = $pathResolver;
-        $this->assetsProvider = $assetsProvider;
     }
 
     public function installAssets(string $targetDir, int $symlinkMask): int
@@ -129,7 +117,7 @@ final class AssetsInstaller implements AssetsInstallerInterface
                 $this->doInstallAsset($relativeOrigin, $target, true);
 
                 return AssetsInstallerInterface::RELATIVE_SYMLINK;
-            } catch (IOException $exception) {
+            } catch (IOException) {
                 // Do nothing, trying to create non-relative symlinks later.
             }
         }
@@ -139,7 +127,7 @@ final class AssetsInstaller implements AssetsInstallerInterface
                 $this->doInstallAsset($origin, $target, true);
 
                 return AssetsInstallerInterface::SYMLINK;
-            } catch (IOException $exception) {
+            } catch (IOException) {
                 // Do nothing, hard copy later.
             }
         }

@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ThemeBundle\Configuration;
 
-final class CompositeConfigurationProvider implements ConfigurationProviderInterface
+final readonly class CompositeConfigurationProvider implements ConfigurationProviderInterface
 {
-    /** @var ConfigurationProviderInterface[] */
-    private array $configurationProviders;
-
     /**
      * @param ConfigurationProviderInterface[] $configurationProviders
      */
-    public function __construct(array $configurationProviders)
+    public function __construct(private array $configurationProviders)
     {
-        $this->configurationProviders = $configurationProviders;
     }
 
     public function getConfigurations(): array

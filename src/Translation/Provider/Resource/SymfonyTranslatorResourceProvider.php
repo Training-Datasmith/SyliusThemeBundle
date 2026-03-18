@@ -23,11 +23,8 @@ final class SymfonyTranslatorResourceProvider implements TranslatorResourceProvi
 
     private array $resourcesLocales = [];
 
-    private array $filepaths;
-
-    public function __construct(array $filepaths = [])
+    public function __construct(private array $filepaths = [])
     {
-        $this->filepaths = $filepaths;
     }
 
     public function getResources(): array
@@ -46,7 +43,7 @@ final class SymfonyTranslatorResourceProvider implements TranslatorResourceProvi
 
     private function initializeIfNeeded(): void
     {
-        foreach ($this->filepaths as $key => $filepath) {
+        foreach ($this->filepaths as $filepath) {
             $resource = new TranslationResource($filepath);
 
             $this->resources[] = $resource;

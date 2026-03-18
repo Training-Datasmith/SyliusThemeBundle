@@ -15,16 +15,10 @@ namespace Sylius\Bundle\ThemeBundle\Configuration\Filesystem;
 
 use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationProcessorInterface;
 
-final class ProcessingConfigurationLoader implements ConfigurationLoaderInterface
+final readonly class ProcessingConfigurationLoader implements ConfigurationLoaderInterface
 {
-    private ConfigurationLoaderInterface $decoratedLoader;
-
-    private ConfigurationProcessorInterface $configurationProcessor;
-
-    public function __construct(ConfigurationLoaderInterface $decoratedLoader, ConfigurationProcessorInterface $configurationProcessor)
+    public function __construct(private ConfigurationLoaderInterface $decoratedLoader, private ConfigurationProcessorInterface $configurationProcessor)
     {
-        $this->decoratedLoader = $decoratedLoader;
-        $this->configurationProcessor = $configurationProcessor;
     }
 
     public function load(string $identifier): array

@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ThemeBundle\Translation\Finder;
 
-final class OrderingTranslationFilesFinder implements TranslationFilesFinderInterface
+final readonly class OrderingTranslationFilesFinder implements TranslationFilesFinderInterface
 {
-    private TranslationFilesFinderInterface $translationFilesFinder;
-
-    public function __construct(TranslationFilesFinderInterface $translationFilesFinder)
+    public function __construct(private TranslationFilesFinderInterface $translationFilesFinder)
     {
-        $this->translationFilesFinder = $translationFilesFinder;
     }
 
     public function findTranslationFiles(string $path): array

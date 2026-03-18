@@ -24,21 +24,14 @@ use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
  */
 class PathPackage extends BasePathPackage
 {
-    protected ThemeContextInterface $themeContext;
-
-    protected PathResolverInterface $pathResolver;
-
     public function __construct(
         string $basePath,
         VersionStrategyInterface $versionStrategy,
-        ThemeContextInterface $themeContext,
-        PathResolverInterface $pathResolver,
+        protected ThemeContextInterface $themeContext,
+        protected PathResolverInterface $pathResolver,
         ?ContextInterface $context = null,
     ) {
         parent::__construct($basePath, $versionStrategy, $context);
-
-        $this->themeContext = $themeContext;
-        $this->pathResolver = $pathResolver;
     }
 
     /**
@@ -62,6 +55,6 @@ class PathPackage extends BasePathPackage
             return $versionedPath;
         }
 
-        return $this->getBasePath() . ltrim($versionedPath, '/');
+        return $this->getBasePath() . ltrim((string) $versionedPath, '/');
     }
 }

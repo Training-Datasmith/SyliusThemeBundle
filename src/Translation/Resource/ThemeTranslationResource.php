@@ -15,25 +15,21 @@ namespace Sylius\Bundle\ThemeBundle\Translation\Resource;
 
 use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
-final class ThemeTranslationResource implements TranslationResourceInterface
+final readonly class ThemeTranslationResource implements TranslationResourceInterface
 {
-    private string $name;
-
     private string $locale;
 
     private string $format;
 
     private string $domain;
 
-    public function __construct(ThemeInterface $theme, string $filepath)
+    public function __construct(ThemeInterface $theme, private string $name)
     {
-        $this->name = $filepath;
-
-        $parts = explode('.', basename($filepath), 3);
+        $parts = explode('.', basename($this->name), 3);
         if (3 !== count($parts)) {
             throw new \InvalidArgumentException(sprintf(
                 'Could not create a translation resource with filepath "%s".',
-                $filepath,
+                $this->name,
             ));
         }
 

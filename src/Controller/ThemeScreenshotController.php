@@ -20,13 +20,10 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-final class ThemeScreenshotController
+final readonly class ThemeScreenshotController
 {
-    private ThemeRepositoryInterface $themeRepository;
-
-    public function __construct(ThemeRepositoryInterface $themeRepository)
+    public function __construct(private ThemeRepositoryInterface $themeRepository)
     {
-        $this->themeRepository = $themeRepository;
     }
 
     public function streamScreenshotAction(string $themeName, int $screenshotNumber): Response

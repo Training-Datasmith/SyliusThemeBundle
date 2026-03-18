@@ -21,30 +21,10 @@ use Sylius\Bundle\ThemeBundle\Model\ThemeAuthor;
 use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 use Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot;
 
-final class ThemeLoader implements ThemeLoaderInterface
+final readonly class ThemeLoader implements ThemeLoaderInterface
 {
-    private ConfigurationProviderInterface $configurationProvider;
-
-    private ThemeFactoryInterface $themeFactory;
-
-    private ThemeAuthorFactoryInterface $themeAuthorFactory;
-
-    private ThemeScreenshotFactoryInterface $themeScreenshotFactory;
-
-    private CircularDependencyCheckerInterface $circularDependencyChecker;
-
-    public function __construct(
-        ConfigurationProviderInterface $configurationProvider,
-        ThemeFactoryInterface $themeFactory,
-        ThemeAuthorFactoryInterface $themeAuthorFactory,
-        ThemeScreenshotFactoryInterface $themeScreenshotFactory,
-        CircularDependencyCheckerInterface $circularDependencyChecker,
-    ) {
-        $this->configurationProvider = $configurationProvider;
-        $this->themeFactory = $themeFactory;
-        $this->themeAuthorFactory = $themeAuthorFactory;
-        $this->themeScreenshotFactory = $themeScreenshotFactory;
-        $this->circularDependencyChecker = $circularDependencyChecker;
+    public function __construct(private ConfigurationProviderInterface $configurationProvider, private ThemeFactoryInterface $themeFactory, private ThemeAuthorFactoryInterface $themeAuthorFactory, private ThemeScreenshotFactoryInterface $themeScreenshotFactory, private CircularDependencyCheckerInterface $circularDependencyChecker)
+    {
     }
 
     public function load(): array
@@ -131,9 +111,7 @@ final class ThemeLoader implements ThemeLoaderInterface
      */
     private function convertAuthorsArraysToAuthorsObjects(array $authorsArrays): array
     {
-        return array_map(function (array $authorArray): ThemeAuthor {
-            return $this->themeAuthorFactory->createFromArray($authorArray);
-        }, $authorsArrays);
+        return array_map(fn(array $authorArray): ThemeAuthor => $this->themeAuthorFactory->createFromArray($authorArray), $authorsArrays);
     }
 
     /**
@@ -141,8 +119,6 @@ final class ThemeLoader implements ThemeLoaderInterface
      */
     private function convertScreenshotsArraysToScreenshotsObjects(array $screenshotsArrays): array
     {
-        return array_map(function (array $screenshotArray): ThemeScreenshot {
-            return $this->themeScreenshotFactory->createFromArray($screenshotArray);
-        }, $screenshotsArrays);
+        return array_map(fn(array $screenshotArray): ThemeScreenshot => $this->themeScreenshotFactory->createFromArray($screenshotArray), $screenshotsArrays);
     }
 }

@@ -23,13 +23,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'sylius:theme:list', description: 'Shows list of detected themes.')]
 final class ListCommand extends Command
 {
-    private ThemeRepositoryInterface $themeRepository;
-
-    public function __construct(ThemeRepositoryInterface $themeRepository)
+    public function __construct(private readonly ThemeRepositoryInterface $themeRepository)
     {
         parent::__construct();
-
-        $this->themeRepository = $themeRepository;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

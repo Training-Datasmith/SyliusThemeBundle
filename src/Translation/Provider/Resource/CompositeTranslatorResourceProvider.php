@@ -13,17 +13,13 @@ declare(strict_types=1);
 
 namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Resource;
 
-final class CompositeTranslatorResourceProvider implements TranslatorResourceProviderInterface
+final readonly class CompositeTranslatorResourceProvider implements TranslatorResourceProviderInterface
 {
-    /** @var array|TranslatorResourceProviderInterface[] */
-    private array $resourceProviders;
-
     /**
      * @param TranslatorResourceProviderInterface[] $resourceProviders
      */
-    public function __construct(array $resourceProviders = [])
+    public function __construct(private array $resourceProviders = [])
     {
-        $this->resourceProviders = $resourceProviders;
     }
 
     public function getResources(): array

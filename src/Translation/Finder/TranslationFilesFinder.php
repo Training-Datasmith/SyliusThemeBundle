@@ -17,13 +17,10 @@ use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\SplFileInfo;
 
-final class TranslationFilesFinder implements TranslationFilesFinderInterface
+final readonly class TranslationFilesFinder implements TranslationFilesFinderInterface
 {
-    private FinderFactoryInterface $finderFactory;
-
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(private FinderFactoryInterface $finderFactory)
     {
-        $this->finderFactory = $finderFactory;
     }
 
     public function findTranslationFiles(string $path): array
@@ -58,14 +55,14 @@ final class TranslationFilesFinder implements TranslationFilesFinderInterface
             ;
 
             return $finder;
-        } catch (DirectoryNotFoundException $exception) {
+        } catch (DirectoryNotFoundException) {
             return [];
         }
     }
 
     private function isTranslationFile(string $file): bool
     {
-        return false !== strpos($file, 'translations' . \DIRECTORY_SEPARATOR) &&
+        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) &&
             (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
     }
 }

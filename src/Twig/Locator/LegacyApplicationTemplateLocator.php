@@ -21,18 +21,14 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @deprecated Deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.
  */
-final class LegacyApplicationTemplateLocator implements TemplateLocatorInterface
+final readonly class LegacyApplicationTemplateLocator implements TemplateLocatorInterface
 {
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem)
+    public function __construct(private Filesystem $filesystem)
     {
         @trigger_error(sprintf(
             '"%s" is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.',
             self::class,
         ), \E_USER_DEPRECATED);
-
-        $this->filesystem = $filesystem;
     }
 
     public function locate(string $template, ThemeInterface $theme): string
@@ -47,6 +43,6 @@ final class LegacyApplicationTemplateLocator implements TemplateLocatorInterface
 
     public function supports(string $template): bool
     {
-        return strpos($template, '@') !== 0;
+        return !str_starts_with($template, '@');
     }
 }

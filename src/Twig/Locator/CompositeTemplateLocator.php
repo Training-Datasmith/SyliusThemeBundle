@@ -15,21 +15,19 @@ namespace Sylius\Bundle\ThemeBundle\Twig\Locator;
 
 use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
-final class CompositeTemplateLocator implements TemplateLocatorInterface
+final readonly class CompositeTemplateLocator implements TemplateLocatorInterface
 {
-    /**
-     * @psalm-var iterable<TemplateLocatorInterface>
-     * @var iterable|TemplateLocatorInterface[]
-     */
-    private iterable $themedTemplateLocators;
-
     /**
      * @psalm-param iterable<TemplateLocatorInterface> $themedTemplateLocators
      * @param iterable|TemplateLocatorInterface[] $themedTemplateLocators
      */
-    public function __construct(iterable $themedTemplateLocators)
+    public function __construct(
+        /**
+         * @psalm-var iterable<TemplateLocatorInterface>
+         */
+        private iterable $themedTemplateLocators
+    )
     {
-        $this->themedTemplateLocators = $themedTemplateLocators;
     }
 
     public function locate(string $template, ThemeInterface $theme): string
@@ -41,7 +39,7 @@ final class CompositeTemplateLocator implements TemplateLocatorInterface
 
             try {
                 return $themedTemplateLocator->locate($template, $theme);
-            } catch (TemplateNotFoundException $exception) {
+            } catch (TemplateNotFoundException) {
                 // Do nothing.
             }
         }

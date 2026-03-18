@@ -21,24 +21,17 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * @deprecated Deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.
  */
-final class LegacyAssetsProvider implements AssetsProviderInterface
+final readonly class LegacyAssetsProvider implements AssetsProviderInterface
 {
-    private AssetsProviderInterface $assetsProvider;
-
     private KernelInterface $kernel;
 
-    private ThemeHierarchyProviderInterface $themeHierarchyProvider;
-
-    public function __construct(AssetsProviderInterface $assetsProvider, KernelInterface $kernel, ThemeHierarchyProviderInterface $themeHierarchyProvider)
+    public function __construct(private AssetsProviderInterface $assetsProvider, KernelInterface $kernel, private ThemeHierarchyProviderInterface $themeHierarchyProvider)
     {
         @trigger_error(sprintf(
             '"%s" is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.',
             self::class,
         ), \E_USER_DEPRECATED);
-
-        $this->assetsProvider = $assetsProvider;
         $this->kernel = $kernel;
-        $this->themeHierarchyProvider = $themeHierarchyProvider;
     }
 
     public function provideDirectoriesForTheme(ThemeInterface $rootTheme): iterable

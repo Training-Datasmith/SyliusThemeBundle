@@ -19,18 +19,14 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @deprecated Deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.
  */
-final class LegacyTranslationFilesFinder implements TranslationFilesFinderInterface
+final readonly class LegacyTranslationFilesFinder implements TranslationFilesFinderInterface
 {
-    private FinderFactoryInterface $finderFactory;
-
-    public function __construct(FinderFactoryInterface $finderFactory)
+    public function __construct(private FinderFactoryInterface $finderFactory)
     {
         @trigger_error(sprintf(
             '"%s" is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.',
             self::class,
         ), \E_USER_DEPRECATED);
-
-        $this->finderFactory = $finderFactory;
     }
 
     public function findTranslationFiles(string $path): array
@@ -68,7 +64,7 @@ final class LegacyTranslationFilesFinder implements TranslationFilesFinderInterf
 
     private function isTranslationFile(string $file): bool
     {
-        return false !== strpos($file, 'translations' . \DIRECTORY_SEPARATOR) &&
+        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) &&
             (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
     }
 }

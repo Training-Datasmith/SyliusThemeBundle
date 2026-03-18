@@ -21,11 +21,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ThemeNameChoiceType extends AbstractType
 {
-    private ThemeRepositoryInterface $themeRepository;
-
-    public function __construct(ThemeRepositoryInterface $themeRepository)
+    public function __construct(private readonly ThemeRepositoryInterface $themeRepository)
     {
-        $this->themeRepository = $themeRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -37,7 +34,7 @@ final class ThemeNameChoiceType extends AbstractType
                 $choices = [];
                 foreach ($themes as $theme) {
                     $title = $theme->getTitle();
-                    $choices[$title !== null ? $title : $theme->getName()] = $theme->getName();
+                    $choices[$title ?? $theme->getName()] = $theme->getName();
                 }
 
                 return $choices;

@@ -29,16 +29,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'sylius:theme:assets:install', description: 'Installs themes web assets under a public web directory')]
 final class AssetsInstallCommand extends Command
 {
-    private AssetsInstallerInterface $assetsInstaller;
-
-    private string $projectDir;
-
-    public function __construct(AssetsInstallerInterface $assetsInstaller, string $projectDir)
+    public function __construct(private readonly AssetsInstallerInterface $assetsInstaller, private readonly string $projectDir)
     {
         parent::__construct();
-
-        $this->assetsInstaller = $assetsInstaller;
-        $this->projectDir = $projectDir;
     }
 
     protected function configure(): void
@@ -135,10 +128,6 @@ EOT;
 
         $composerConfig = json_decode((string) file_get_contents($composerFilePath), true);
 
-        if (isset($composerConfig['extra']['public-dir'])) {
-            return $composerConfig['extra']['public-dir'];
-        }
-
-        return $defaultPublicDir;
+        return $composerConfig['extra']['public-dir'] ?? $defaultPublicDir;
     }
 }

@@ -18,16 +18,13 @@ use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-final class AssetsProvider implements AssetsProviderInterface
+final readonly class AssetsProvider implements AssetsProviderInterface
 {
     private KernelInterface $kernel;
 
-    private ThemeHierarchyProviderInterface $themeHierarchyProvider;
-
-    public function __construct(KernelInterface $kernel, ThemeHierarchyProviderInterface $themeHierarchyProvider)
+    public function __construct(KernelInterface $kernel, private ThemeHierarchyProviderInterface $themeHierarchyProvider)
     {
         $this->kernel = $kernel;
-        $this->themeHierarchyProvider = $themeHierarchyProvider;
     }
 
     public function provideDirectoriesForTheme(ThemeInterface $rootTheme): iterable

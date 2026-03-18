@@ -20,22 +20,10 @@ use Sylius\Bundle\ThemeBundle\Translation\Finder\TranslationFilesFinderInterface
 use Sylius\Bundle\ThemeBundle\Translation\Resource\ThemeTranslationResource;
 use Sylius\Bundle\ThemeBundle\Translation\Resource\TranslationResourceInterface;
 
-final class ThemeTranslatorResourceProvider implements TranslatorResourceProviderInterface
+final readonly class ThemeTranslatorResourceProvider implements TranslatorResourceProviderInterface
 {
-    private TranslationFilesFinderInterface $translationFilesFinder;
-
-    private ThemeRepositoryInterface $themeRepository;
-
-    private ThemeHierarchyProviderInterface $themeHierarchyProvider;
-
-    public function __construct(
-        TranslationFilesFinderInterface $translationFilesFinder,
-        ThemeRepositoryInterface $themeRepository,
-        ThemeHierarchyProviderInterface $themeHierarchyProvider,
-    ) {
-        $this->translationFilesFinder = $translationFilesFinder;
-        $this->themeRepository = $themeRepository;
-        $this->themeHierarchyProvider = $themeHierarchyProvider;
+    public function __construct(private TranslationFilesFinderInterface $translationFilesFinder, private ThemeRepositoryInterface $themeRepository, private ThemeHierarchyProviderInterface $themeHierarchyProvider)
+    {
     }
 
     public function getResources(): array
@@ -53,9 +41,7 @@ final class ThemeTranslatorResourceProvider implements TranslatorResourceProvide
 
     public function getResourcesLocales(): array
     {
-        return array_values(array_unique(array_map(static function (TranslationResourceInterface $translationResource): string {
-            return $translationResource->getLocale();
-        }, $this->getResources())));
+        return array_values(array_unique(array_map(static fn(TranslationResourceInterface $translationResource): string => $translationResource->getLocale(), $this->getResources())));
     }
 
     private function extractResourcesFromTheme(ThemeInterface $mainTheme): array

@@ -24,7 +24,7 @@ final class TranslatorLoaderProviderPass implements CompilerPassInterface
     {
         try {
             $loaderProvider = $container->findDefinition(TranslatorLoaderProviderInterface::class);
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return;
         }
 

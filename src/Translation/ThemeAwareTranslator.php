@@ -20,17 +20,15 @@ use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ThemeAwareTranslator implements TranslatorInterface, TranslatorBagInterface, WarmableInterface, LocaleAwareInterface
+final readonly class ThemeAwareTranslator implements TranslatorInterface, TranslatorBagInterface, WarmableInterface, LocaleAwareInterface
 {
     /** @var TranslatorInterface&LocaleAwareInterface&TranslatorBagInterface */
     private TranslatorInterface $translator;
 
-    private ThemeContextInterface $themeContext;
-
     /**
      * @param TranslatorInterface&LocaleAwareInterface&TranslatorBagInterface $translator
      */
-    public function __construct(TranslatorInterface $translator, ThemeContextInterface $themeContext)
+    public function __construct(TranslatorInterface $translator, private ThemeContextInterface $themeContext)
     {
         foreach ([LocaleAwareInterface::class, TranslatorBagInterface::class] as $interface) {
             if (!$translator instanceof $interface) {
@@ -43,7 +41,6 @@ final class ThemeAwareTranslator implements TranslatorInterface, TranslatorBagIn
         }
 
         $this->translator = $translator;
-        $this->themeContext = $themeContext;
     }
 
     /**
@@ -57,7 +54,7 @@ final class ThemeAwareTranslator implements TranslatorInterface, TranslatorBagIn
         return $translator->$method(...$arguments);
     }
 
-    public function trans($id, array $parameters = [], $domain = null, $locale = null): string
+    public function trans($id, array $parameters = [], $domain = null, ?string $locale = null): string
     {
         return $this->translator->trans($id, $parameters, $domain, $this->transformLocale($locale));
     }

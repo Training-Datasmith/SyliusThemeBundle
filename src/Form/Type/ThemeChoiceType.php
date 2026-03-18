@@ -22,23 +22,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class ThemeChoiceType extends AbstractType
 {
-    private ThemeRepositoryInterface $themeRepository;
-
-    public function __construct(ThemeRepositoryInterface $themeRepository)
+    public function __construct(private readonly ThemeRepositoryInterface $themeRepository)
     {
-        $this->themeRepository = $themeRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'choices' => function (Options $options): array {
-                return $this->themeRepository->findAll();
-            },
+            'choices' => fn(Options $options): array => $this->themeRepository->findAll(),
             'choice_label' => function (ThemeInterface $theme): string {
                 $title = $theme->getTitle();
 
-                return $title !== null ? $title : $theme->getName();
+                return $title ?? $theme->getName();
             },
         ]);
     }

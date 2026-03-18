@@ -19,40 +19,28 @@ use Sylius\Bundle\ThemeBundle\Twig\Locator\TemplateNotFoundException;
 use Twig\Loader\LoaderInterface as TwigLoaderInterface;
 use Twig\Source;
 
-final class ThemedTemplateLoader implements LoaderInterface
+final readonly class ThemedTemplateLoader implements LoaderInterface
 {
-    private TwigLoaderInterface $decoratedLoader;
-
-    private TemplateLocatorInterface $templateLocator;
-
-    private ThemeContextInterface $themeContext;
-
-    public function __construct(
-        TwigLoaderInterface $decoratedLoader,
-        TemplateLocatorInterface $templateLocator,
-        ThemeContextInterface $themeContext,
-    ) {
-        $this->decoratedLoader = $decoratedLoader;
-        $this->templateLocator = $templateLocator;
-        $this->themeContext = $themeContext;
+    public function __construct(private TwigLoaderInterface $decoratedLoader, private TemplateLocatorInterface $templateLocator, private ThemeContextInterface $themeContext)
+    {
     }
 
-    public function getSourceContext($name): Source
+    public function getSourceContext(string $name): Source
     {
         try {
             $path = $this->locateTemplate($name);
 
-            return new Source((string) file_get_contents($path), (string) $name, $path);
-        } catch (TemplateNotFoundException $exception) {
+            return new Source((string) file_get_contents($path), $name, $path);
+        } catch (TemplateNotFoundException) {
             return $this->decoratedLoader->getSourceContext($name);
         }
     }
 
-    public function getCacheKey($name): string
+    public function getCacheKey(string $name): string
     {
         try {
             return $this->locateTemplate($name);
-        } catch (TemplateNotFoundException $exception) {
+        } catch (TemplateNotFoundException) {
             return $this->decoratedLoader->getCacheKey($name);
         }
     }
@@ -60,20 +48,20 @@ final class ThemedTemplateLoader implements LoaderInterface
     /**
      * @param int $time
      */
-    public function isFresh($name, $time): bool
+    public function isFresh(string $name, $time): bool
     {
         try {
             return filemtime($this->locateTemplate($name)) <= $time;
-        } catch (TemplateNotFoundException $exception) {
+        } catch (TemplateNotFoundException) {
             return $this->decoratedLoader->isFresh($name, $time);
         }
     }
 
-    public function exists($name): bool
+    public function exists(string $name): bool
     {
         try {
             return stat($this->locateTemplate($name)) !== false;
-        } catch (TemplateNotFoundException $exception) {
+        } catch (TemplateNotFoundException) {
             return $this->decoratedLoader->exists($name);
         }
     }

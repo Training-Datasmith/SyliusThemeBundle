@@ -15,17 +15,13 @@ namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Loader;
 
 use Symfony\Component\Translation\Loader\LoaderInterface;
 
-final class TranslatorLoaderProvider implements TranslatorLoaderProviderInterface
+final readonly class TranslatorLoaderProvider implements TranslatorLoaderProviderInterface
 {
-    /** @var LoaderInterface[] */
-    private array $loaders;
-
     /**
      * @param LoaderInterface[] $loaders
      */
-    public function __construct(array $loaders = [])
+    public function __construct(private array $loaders = [])
     {
-        $this->loaders = $loaders;
     }
 
     public function getLoaders(): array

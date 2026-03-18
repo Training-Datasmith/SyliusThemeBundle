@@ -16,32 +16,20 @@ namespace Sylius\Bundle\ThemeBundle\Configuration\Filesystem;
 use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationProviderInterface;
 use Sylius\Bundle\ThemeBundle\Locator\FileLocatorInterface;
 
-final class FilesystemConfigurationProvider implements ConfigurationProviderInterface
+final readonly class FilesystemConfigurationProvider implements ConfigurationProviderInterface
 {
-    private FileLocatorInterface $fileLocator;
-
-    private ConfigurationLoaderInterface $loader;
-
-    private string $configurationFilename;
-
-    /**
-     * @param string $configurationFilename
-     */
-    public function __construct(FileLocatorInterface $fileLocator, ConfigurationLoaderInterface $loader, $configurationFilename)
+    public function __construct(private FileLocatorInterface $fileLocator, private ConfigurationLoaderInterface $loader, private string $configurationFilename)
     {
-        $this->fileLocator = $fileLocator;
-        $this->loader = $loader;
-        $this->configurationFilename = $configurationFilename;
     }
 
     public function getConfigurations(): array
     {
         try {
             return array_map(
-                [$this->loader, 'load'],
+                $this->loader->load(...),
                 $this->fileLocator->locateFilesNamed($this->configurationFilename),
             );
-        } catch (\InvalidArgumentException $exception) {
+        } catch (\InvalidArgumentException) {
             return [];
         }
     }

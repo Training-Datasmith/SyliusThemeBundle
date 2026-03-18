@@ -17,27 +17,21 @@ use Sylius\Bundle\ThemeBundle\Asset\Installer\AssetsProviderInterface;
 use Sylius\Bundle\ThemeBundle\Filesystem\FilesystemInterface;
 use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
-final class PathResolver implements PathResolverInterface
+final readonly class PathResolver implements PathResolverInterface
 {
-    private AssetsProviderInterface $assetsProvider;
-
-    private FilesystemInterface $filesystem;
-
-    public function __construct(AssetsProviderInterface $assetsProvider, FilesystemInterface $filesystem)
+    public function __construct(private AssetsProviderInterface $assetsProvider, private FilesystemInterface $filesystem)
     {
-        $this->assetsProvider = $assetsProvider;
-        $this->filesystem = $filesystem;
     }
 
     public function resolve(string $path, string $basePath, ThemeInterface $theme): string
     {
         $basePath = rtrim($basePath, '/');
 
-        if ($basePath === '' || strpos($path, $basePath) === false) {
+        if ($basePath === '' || !str_contains($path, $basePath)) {
             $basePathPositionAtPath = 0;
             $basePathLength = 0;
         } else {
-            $basePathPositionAtPath = (int) strpos($path, $basePath);
+            $basePathPositionAtPath = strpos($path, $basePath);
             $basePathLength = strlen($basePath);
         }
 
@@ -57,7 +51,7 @@ final class PathResolver implements PathResolverInterface
         foreach ($this->assetsProvider->provideDirectoriesForTheme($theme) as $originDir => $targetDir) {
             $targetDir = trim($targetDir, '/');
 
-            if ($targetDir !== '' && strpos($relativePath, $targetDir) === false) {
+            if ($targetDir !== '' && !str_contains($relativePath, $targetDir)) {
                 continue;
             }
 
