@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class LegacyAssetsProviderSpec extends ObjectBehavior
 {
-    function let(
+    public function let(
         AssetsProviderInterface $assetsProvider,
         KernelInterface $kernel,
         ThemeHierarchyProviderInterface $themeHierarchyProvider,
@@ -43,17 +43,17 @@ final class LegacyAssetsProviderSpec extends ObjectBehavior
         $this->beConstructedWith($assetsProvider, $kernel, $themeHierarchyProvider);
     }
 
-    function it_should_trigger_deprecated_warning_during_instantiation(): void
+    public function it_should_trigger_deprecated_warning_during_instantiation(): void
     {
         $this->shouldTrigger(\E_USER_DEPRECATED)->duringInstantiation();
     }
 
-    function it_is_an_assets_provider(): void
+    public function it_is_an_assets_provider(): void
     {
         $this->shouldImplement(AssetsProviderInterface::class);
     }
 
-    function it_returns_map_for_bundle(AssetsProviderInterface $assetsProvider, BundleInterface $acmeBundle): void
+    public function it_returns_map_for_bundle(AssetsProviderInterface $assetsProvider, BundleInterface $acmeBundle): void
     {
         $assetsProvider->provideDirectoriesForBundle($acmeBundle)->willYield([
             '/target' => '/origin',
@@ -64,7 +64,7 @@ final class LegacyAssetsProviderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_returns_map_for_theme(AssetsProviderInterface $assetsProvider, ThemeInterface $childTheme): void
+    public function it_returns_map_for_theme(AssetsProviderInterface $assetsProvider, ThemeInterface $childTheme): void
     {
         $assetsProvider->provideDirectoriesForTheme($childTheme)->willYield([
             '/target' => '/origin',

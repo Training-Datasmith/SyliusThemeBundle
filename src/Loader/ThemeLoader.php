@@ -111,7 +111,7 @@ final readonly class ThemeLoader implements ThemeLoaderInterface
      */
     private function convertAuthorsArraysToAuthorsObjects(array $authorsArrays): array
     {
-        return array_map(fn(array $authorArray): ThemeAuthor => $this->themeAuthorFactory->createFromArray($authorArray), $authorsArrays);
+        return array_map(fn (array $authorArray): ThemeAuthor => $this->themeAuthorFactory->createFromArray($authorArray), $authorsArrays);
     }
 
     /**
@@ -119,6 +119,6 @@ final readonly class ThemeLoader implements ThemeLoaderInterface
      */
     private function convertScreenshotsArraysToScreenshotsObjects(array $screenshotsArrays): array
     {
-        return array_map(fn(array $screenshotArray): ThemeScreenshot => $this->themeScreenshotFactory->createFromArray($screenshotArray), $screenshotsArrays);
+        return array_map(fn (array $screenshotArray): ThemeScreenshot => $this->themeScreenshotFactory->createFromArray($screenshotArray), $screenshotsArrays);
     }
 }

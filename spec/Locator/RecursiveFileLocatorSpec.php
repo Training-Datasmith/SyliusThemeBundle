@@ -21,17 +21,17 @@ use Symfony\Component\Finder\SplFileInfo;
 
 final class RecursiveFileLocatorSpec extends ObjectBehavior
 {
-    function let(FinderFactoryInterface $finderFactory): void
+    public function let(FinderFactoryInterface $finderFactory): void
     {
         $this->beConstructedWith($finderFactory, ['/search/path/']);
     }
 
-    function it_implements_sylius_file_locator_interface(): void
+    public function it_implements_sylius_file_locator_interface(): void
     {
         $this->shouldImplement(FileLocatorInterface::class);
     }
 
-    function it_searches_for_file(FinderFactoryInterface $finderFactory, Finder $finder, SplFileInfo $splFileInfo): void
+    public function it_searches_for_file(FinderFactoryInterface $finderFactory, Finder $finder, SplFileInfo $splFileInfo): void
     {
         $finderFactory->create()->willReturn($finder);
 
@@ -50,7 +50,7 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         $this->locateFileNamed('readme.md')->shouldReturn('/search/path/nested/readme.md');
     }
 
-    function it_searches_for_files(
+    public function it_searches_for_files(
         FinderFactoryInterface $finderFactory,
         Finder $finder,
         SplFileInfo $firstSplFileInfo,
@@ -78,7 +78,7 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         ]);
     }
 
-    function it_searches_for_files_at_a_maximum_depth(
+    public function it_searches_for_files_at_a_maximum_depth(
         FinderFactoryInterface $finderFactory,
         Finder $finder,
         SplFileInfo $firstSplFileInfo,
@@ -106,17 +106,17 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         ]);
     }
 
-    function it_throws_an_exception_if_searching_for_file_with_empty_name(): void
+    public function it_throws_an_exception_if_searching_for_file_with_empty_name(): void
     {
         $this->shouldThrow(\InvalidArgumentException::class)->during('locateFileNamed', ['']);
     }
 
-    function it_throws_an_exception_if_searching_for_files_with_empty_name(): void
+    public function it_throws_an_exception_if_searching_for_files_with_empty_name(): void
     {
         $this->shouldThrow(\InvalidArgumentException::class)->during('locateFilesNamed', ['']);
     }
 
-    function it_throws_an_exception_if_there_is_no_file_that_matches_the_given_name(
+    public function it_throws_an_exception_if_there_is_no_file_that_matches_the_given_name(
         FinderFactoryInterface $finderFactory,
         Finder $finder,
     ): void {
@@ -133,7 +133,7 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         $this->shouldThrow(\InvalidArgumentException::class)->during('locateFileNamed', ['readme.md']);
     }
 
-    function it_throws_an_exception_if_there_is_there_are_not_any_files_that_matches_the_given_name(
+    public function it_throws_an_exception_if_there_is_there_are_not_any_files_that_matches_the_given_name(
         FinderFactoryInterface $finderFactory,
         Finder $finder,
     ): void {
@@ -150,7 +150,7 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         $this->shouldThrow(\InvalidArgumentException::class)->during('locateFilesNamed', ['readme.md']);
     }
 
-    function it_isolates_finding_paths_from_multiple_sources(
+    public function it_isolates_finding_paths_from_multiple_sources(
         FinderFactoryInterface $finderFactory,
         Finder $firstFinder,
         Finder $secondFinder,
@@ -182,7 +182,7 @@ final class RecursiveFileLocatorSpec extends ObjectBehavior
         ]);
     }
 
-    function it_silences_finder_exceptions_even_if_searching_in_multiple_sources(
+    public function it_silences_finder_exceptions_even_if_searching_in_multiple_sources(
         FinderFactoryInterface $finderFactory,
         Finder $firstFinder,
         Finder $secondFinder,

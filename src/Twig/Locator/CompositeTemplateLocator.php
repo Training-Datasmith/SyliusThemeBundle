@@ -26,8 +26,7 @@ final readonly class CompositeTemplateLocator implements TemplateLocatorInterfac
          * @psalm-var iterable<TemplateLocatorInterface>
          */
         private iterable $themedTemplateLocators
-    )
-    {
+    ) {
     }
 
     public function locate(string $template, ThemeInterface $theme): string

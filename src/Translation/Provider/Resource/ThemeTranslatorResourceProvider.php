@@ -41,7 +41,7 @@ final readonly class ThemeTranslatorResourceProvider implements TranslatorResour
 
     public function getResourcesLocales(): array
     {
-        return array_values(array_unique(array_map(static fn(TranslationResourceInterface $translationResource): string => $translationResource->getLocale(), $this->getResources())));
+        return array_values(array_unique(array_map(static fn (TranslationResourceInterface $translationResource): string => $translationResource->getLocale(), $this->getResources())));
     }
 
     private function extractResourcesFromTheme(ThemeInterface $mainTheme): array

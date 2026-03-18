@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class AssetsProviderSpec extends ObjectBehavior
 {
-    function let(
+    public function let(
         KernelInterface $kernel,
         ThemeHierarchyProviderInterface $themeHierarchyProvider,
         BundleInterface $acmeBundle,
@@ -42,12 +42,12 @@ final class AssetsProviderSpec extends ObjectBehavior
         $this->beConstructedWith($kernel, $themeHierarchyProvider);
     }
 
-    function it_is_an_assets_provider(): void
+    public function it_is_an_assets_provider(): void
     {
         $this->shouldImplement(AssetsProviderInterface::class);
     }
 
-    function it_returns_map_for_bundle(BundleInterface $acmeBundle): void
+    public function it_returns_map_for_bundle(BundleInterface $acmeBundle): void
     {
         $this->provideDirectoriesForBundle($acmeBundle)->shouldYield([
             '/src/bundle/AcmeBundle/Resources/public' => '/bundles/acme',
@@ -55,7 +55,7 @@ final class AssetsProviderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_returns_map_for_theme(ThemeInterface $childTheme): void
+    public function it_returns_map_for_theme(ThemeInterface $childTheme): void
     {
         $this->provideDirectoriesForTheme($childTheme)->shouldYield([
             '/src/bundle/AcmeBundle/Resources/public' => '/bundles/acme',

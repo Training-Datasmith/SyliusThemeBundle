@@ -29,7 +29,7 @@ final class ThemeChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'choices' => fn(Options $options): array => $this->themeRepository->findAll(),
+            'choices' => fn (Options $options): array => $this->themeRepository->findAll(),
             'choice_label' => function (ThemeInterface $theme): string {
                 $title = $theme->getTitle();
 

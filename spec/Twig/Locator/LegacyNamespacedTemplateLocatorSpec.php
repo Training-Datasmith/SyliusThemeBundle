@@ -21,22 +21,22 @@ use Symfony\Component\Filesystem\Filesystem;
 
 final class LegacyNamespacedTemplateLocatorSpec extends ObjectBehavior
 {
-    function let(Filesystem $filesystem): void
+    public function let(Filesystem $filesystem): void
     {
         $this->beConstructedWith($filesystem);
     }
 
-    function it_should_trigger_deprecated_warning_during_instantiation(): void
+    public function it_should_trigger_deprecated_warning_during_instantiation(): void
     {
         $this->shouldTrigger(\E_USER_DEPRECATED)->duringInstantiation();
     }
 
-    function it_implements_resource_locator_interface(): void
+    public function it_implements_resource_locator_interface(): void
     {
         $this->shouldImplement(TemplateLocatorInterface::class);
     }
 
-    function it_locates_bundle_resource_using_path_derived_from_twig_namespaces(
+    public function it_locates_bundle_resource_using_path_derived_from_twig_namespaces(
         Filesystem $filesystem,
         ThemeInterface $theme,
     ): void {
@@ -47,7 +47,7 @@ final class LegacyNamespacedTemplateLocatorSpec extends ObjectBehavior
         $this->locate('@Just/Directory/index.html.twig', $theme)->shouldReturn('/theme/path/JustBundle/views/Directory/index.html.twig');
     }
 
-    function it_locates_plugin_resource_using_path_derived_from_twig_namespaces(
+    public function it_locates_plugin_resource_using_path_derived_from_twig_namespaces(
         Filesystem $filesystem,
         ThemeInterface $theme,
     ): void {
@@ -58,7 +58,7 @@ final class LegacyNamespacedTemplateLocatorSpec extends ObjectBehavior
         $this->locate('@JustPlugin/Directory/index.html.twig', $theme)->shouldReturn('/theme/path/JustPlugin/views/Directory/index.html.twig');
     }
 
-    function it_throws_an_exception_if_resource_can_not_be_located_using_path_derived_from_twig_namespaces(
+    public function it_throws_an_exception_if_resource_can_not_be_located_using_path_derived_from_twig_namespaces(
         Filesystem $filesystem,
         ThemeInterface $theme,
     ): void {
@@ -70,7 +70,7 @@ final class LegacyNamespacedTemplateLocatorSpec extends ObjectBehavior
         $this->shouldThrow(TemplateNotFoundException::class)->during('locate', ['@Just/Directory/index.html.twig', $theme]);
     }
 
-    function it_throws_an_exception_if_resource_path_contains_two_dots_in_a_row(ThemeInterface $theme): void
+    public function it_throws_an_exception_if_resource_path_contains_two_dots_in_a_row(ThemeInterface $theme): void
     {
         $this->shouldThrow(\InvalidArgumentException::class)->during('locate', ['@ParentBundle/Resources/views/../views/Directory/index.html.twig', $theme]);
     }

@@ -34,7 +34,7 @@ class ThemeCollectorTest extends TestCase
 
     private function createThemeCollector(): ThemeCollector
     {
-        $themeLoader = new class() implements ThemeLoaderInterface {
+        $themeLoader = new class () implements ThemeLoaderInterface {
             public function load(): array
             {
                 return [];

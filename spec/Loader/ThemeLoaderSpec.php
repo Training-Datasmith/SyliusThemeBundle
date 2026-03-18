@@ -29,7 +29,7 @@ use Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot;
 
 final class ThemeLoaderSpec extends ObjectBehavior
 {
-    function let(
+    public function let(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         ThemeAuthorFactoryInterface $themeAuthorFactory,
@@ -45,12 +45,12 @@ final class ThemeLoaderSpec extends ObjectBehavior
         );
     }
 
-    function it_implements_theme_loader_interface(): void
+    public function it_implements_theme_loader_interface(): void
     {
         $this->shouldImplement(ThemeLoaderInterface::class);
     }
 
-    function it_loads_a_single_theme(
+    public function it_loads_a_single_theme(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         CircularDependencyCheckerInterface $circularDependencyChecker,
@@ -75,7 +75,7 @@ final class ThemeLoaderSpec extends ObjectBehavior
         $this->load()->shouldBeLike([$expectedTheme]);
     }
 
-    function it_loads_a_theme_with_author(
+    public function it_loads_a_theme_with_author(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         ThemeAuthorFactoryInterface $themeAuthorFactory,
@@ -107,7 +107,7 @@ final class ThemeLoaderSpec extends ObjectBehavior
         $this->load()->shouldBeLike([$expectedTheme]);
     }
 
-    function it_loads_a_theme_with_screenshot(
+    public function it_loads_a_theme_with_screenshot(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         ThemeScreenshotFactoryInterface $themeScreenshotFactory,
@@ -141,7 +141,7 @@ final class ThemeLoaderSpec extends ObjectBehavior
         $this->load()->shouldBeLike([$expectedTheme]);
     }
 
-    function it_loads_a_theme_with_its_dependency(
+    public function it_loads_a_theme_with_its_dependency(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         CircularDependencyCheckerInterface $circularDependencyChecker,
@@ -180,7 +180,7 @@ final class ThemeLoaderSpec extends ObjectBehavior
         $this->load()->shouldBeLike([$expectedFirstTheme, $expectedSecondTheme]);
     }
 
-    function it_throws_an_exception_if_requires_not_existing_dependency(
+    public function it_throws_an_exception_if_requires_not_existing_dependency(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
     ): void {
@@ -204,7 +204,7 @@ final class ThemeLoaderSpec extends ObjectBehavior
         ;
     }
 
-    function it_throws_an_exception_if_there_is_a_circular_dependency_found(
+    public function it_throws_an_exception_if_there_is_a_circular_dependency_found(
         ConfigurationProviderInterface $configurationProvider,
         ThemeFactoryInterface $themeFactory,
         CircularDependencyCheckerInterface $circularDependencyChecker,

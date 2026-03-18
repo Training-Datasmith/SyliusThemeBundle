@@ -86,7 +86,7 @@ class Theme implements ThemeInterface, \Stringable
 
     public function removeAuthor(ThemeAuthor $author): void
     {
-        $this->authors = array_filter($this->authors, fn(\Sylius\Bundle\ThemeBundle\Model\ThemeAuthor $currentAuthor) => $currentAuthor !== $author);
+        $this->authors = array_filter($this->authors, fn (\Sylius\Bundle\ThemeBundle\Model\ThemeAuthor $currentAuthor) => $currentAuthor !== $author);
     }
 
     public function getParents(): array
@@ -101,7 +101,7 @@ class Theme implements ThemeInterface, \Stringable
 
     public function removeParent(ThemeInterface $theme): void
     {
-        $this->parents = array_filter($this->parents, fn(\Sylius\Bundle\ThemeBundle\Model\ThemeInterface $currentTheme) => $currentTheme !== $theme);
+        $this->parents = array_filter($this->parents, fn (\Sylius\Bundle\ThemeBundle\Model\ThemeInterface $currentTheme) => $currentTheme !== $theme);
     }
 
     public function getScreenshots(): array
@@ -116,7 +116,7 @@ class Theme implements ThemeInterface, \Stringable
 
     public function removeScreenshot(ThemeScreenshot $screenshot): void
     {
-        $this->screenshots = array_filter($this->screenshots, fn(\Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot $currentScreenshot) => $currentScreenshot !== $screenshot);
+        $this->screenshots = array_filter($this->screenshots, fn (\Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot $currentScreenshot) => $currentScreenshot !== $screenshot);
     }
 
     private function assertNameIsValid(string $name): void

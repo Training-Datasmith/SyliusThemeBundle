@@ -21,17 +21,17 @@ use Symfony\Component\Filesystem\Filesystem;
 
 final class ApplicationTemplateLocatorSpec extends ObjectBehavior
 {
-    function let(Filesystem $filesystem): void
+    public function let(Filesystem $filesystem): void
     {
         $this->beConstructedWith($filesystem);
     }
 
-    function it_implements_resource_locator_interface(): void
+    public function it_implements_resource_locator_interface(): void
     {
         $this->shouldImplement(TemplateLocatorInterface::class);
     }
 
-    function it_locates_application_resource(Filesystem $filesystem, ThemeInterface $theme): void
+    public function it_locates_application_resource(Filesystem $filesystem, ThemeInterface $theme): void
     {
         $theme->getPath()->willReturn('/theme/path');
 
@@ -40,7 +40,7 @@ final class ApplicationTemplateLocatorSpec extends ObjectBehavior
         $this->locate('resource', $theme)->shouldReturn('/theme/path/templates/resource');
     }
 
-    function it_throws_an_exception_if_resource_can_not_be_located(Filesystem $filesystem, ThemeInterface $theme): void
+    public function it_throws_an_exception_if_resource_can_not_be_located(Filesystem $filesystem, ThemeInterface $theme): void
     {
         $theme->getName()->willReturn('theme/name');
         $theme->getPath()->willReturn('/theme/path');

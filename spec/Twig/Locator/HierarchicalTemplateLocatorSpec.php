@@ -21,7 +21,7 @@ use Sylius\Bundle\ThemeBundle\Twig\Locator\TemplateNotFoundException;
 
 final class HierarchicalTemplateLocatorSpec extends ObjectBehavior
 {
-    function let(
+    public function let(
         TemplateLocatorInterface $templateLocator,
         ThemeHierarchyProviderInterface $themeHierarchyProvider,
         ThemeInterface $childTheme,
@@ -32,12 +32,12 @@ final class HierarchicalTemplateLocatorSpec extends ObjectBehavior
         $this->beConstructedWith($templateLocator, $themeHierarchyProvider);
     }
 
-    function it_is_a_template_locator(): void
+    public function it_is_a_template_locator(): void
     {
         $this->shouldImplement(TemplateLocatorInterface::class);
     }
 
-    function it_locates_a_template_using_themes_hierarchy(
+    public function it_locates_a_template_using_themes_hierarchy(
         TemplateLocatorInterface $templateLocator,
         ThemeInterface $childTheme,
         ThemeInterface $parentTheme,
@@ -48,7 +48,7 @@ final class HierarchicalTemplateLocatorSpec extends ObjectBehavior
         $this->locate('template.html.twig', $childTheme)->shouldReturn('located.html.twig');
     }
 
-    function it_throws_an_exception_if_no_locator_returns_meaningful_response_for_given_themes(
+    public function it_throws_an_exception_if_no_locator_returns_meaningful_response_for_given_themes(
         TemplateLocatorInterface $templateLocator,
         ThemeInterface $childTheme,
         ThemeInterface $parentTheme,
@@ -62,14 +62,14 @@ final class HierarchicalTemplateLocatorSpec extends ObjectBehavior
         $this->shouldThrow(TemplateNotFoundException::class)->during('locate', ['template.html.twig', $childTheme]);
     }
 
-    function it_supports_locating_a_template_if_decorated_loader_does(TemplateLocatorInterface $templateLocator): void
+    public function it_supports_locating_a_template_if_decorated_loader_does(TemplateLocatorInterface $templateLocator): void
     {
         $templateLocator->supports('template.html.twig')->willReturn(true);
 
         $this->supports('template.html.twig')->shouldReturn(true);
     }
 
-    function it_does_not_support_locating_a_template_if_decorated_loader_does_not(TemplateLocatorInterface $templateLocator): void
+    public function it_does_not_support_locating_a_template_if_decorated_loader_does_not(TemplateLocatorInterface $templateLocator): void
     {
         $templateLocator->supports('template.html.twig')->willReturn(false);
 

@@ -28,7 +28,7 @@ final class TemplateNotFoundException extends \RuntimeException
             implode(
                 '", "',
                 array_map(
-                    static fn(ThemeInterface $theme): string => $theme->getName(),
+                    static fn (ThemeInterface $theme): string => $theme->getName(),
                     $themes,
                 ),
             ),

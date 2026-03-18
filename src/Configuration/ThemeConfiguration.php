@@ -84,7 +84,7 @@ final class ThemeConfiguration implements ConfigurationInterface
             ->validate()
                 ->ifTrue(
                     /** @param mixed $screenshot */
-                    fn($screenshot): bool => [] === $screenshot || ['path' => ''] === $screenshot,
+                    fn ($screenshot): bool => [] === $screenshot || ['path' => ''] === $screenshot,
                 )
                 ->thenInvalid('Screenshot cannot be empty!')
         ;
@@ -93,7 +93,7 @@ final class ThemeConfiguration implements ConfigurationInterface
                 ->ifString()
                 ->then(
                     /** @param mixed $value */
-                    fn($value): array => ['path' => $value],
+                    fn ($value): array => ['path' => $value],
                 )
         ;
 
@@ -117,7 +117,7 @@ final class ThemeConfiguration implements ConfigurationInterface
             ->validate()
                 ->ifTrue(
                     /** @param mixed $author */
-                    fn($author): bool => [] === $author,
+                    fn ($author): bool => [] === $author,
                 )
                 ->thenInvalid('Author cannot be empty!')
         ;

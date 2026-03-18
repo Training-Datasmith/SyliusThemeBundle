@@ -18,24 +18,24 @@ use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
 final class TemplateNotFoundExceptionSpec extends ObjectBehavior
 {
-    function let(ThemeInterface $theme): void
+    public function let(ThemeInterface $theme): void
     {
         $theme->getName()->willReturn('theme/name');
 
         $this->beConstructedWith('resource name', [$theme]);
     }
 
-    function it_is_a_runtime_exception(): void
+    public function it_is_a_runtime_exception(): void
     {
         $this->shouldHaveType(\RuntimeException::class);
     }
 
-    function it_has_custom_message(): void
+    public function it_has_custom_message(): void
     {
         $this->getMessage()->shouldReturn('Could not find template "resource name" using theme(s) "theme/name".');
     }
 
-    function it_has_custom_message_with_multiple_themes(ThemeInterface $firstTheme, ThemeInterface $secondTheme): void
+    public function it_has_custom_message_with_multiple_themes(ThemeInterface $firstTheme, ThemeInterface $secondTheme): void
     {
         $firstTheme->getName()->willReturn('theme/first');
         $secondTheme->getName()->willReturn('theme/second');

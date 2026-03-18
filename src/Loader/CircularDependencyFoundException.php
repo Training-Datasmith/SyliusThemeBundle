@@ -48,7 +48,7 @@ final class CircularDependencyFoundException extends \DomainException
 
     private function formatCycleToString(array $themes): string
     {
-        $themesNames = array_map(fn(ThemeInterface $theme) => $theme->getName(), $themes);
+        $themesNames = array_map(fn (ThemeInterface $theme) => $theme->getName(), $themes);
 
         return implode(' -> ', $themesNames);
     }

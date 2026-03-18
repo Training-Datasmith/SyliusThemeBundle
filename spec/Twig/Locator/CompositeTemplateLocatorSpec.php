@@ -20,19 +20,19 @@ use Sylius\Bundle\ThemeBundle\Twig\Locator\TemplateNotFoundException;
 
 final class CompositeTemplateLocatorSpec extends ObjectBehavior
 {
-    function let(
+    public function let(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
     ): void {
         $this->beConstructedWith([$firstTemplateLocator, $secondTemplateLocator]);
     }
 
-    function it_is_a_template_locator(): void
+    public function it_is_a_template_locator(): void
     {
         $this->shouldImplement(TemplateLocatorInterface::class);
     }
 
-    function it_locates_a_template_using_locators_supporting_given_template(
+    public function it_locates_a_template_using_locators_supporting_given_template(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
         ThemeInterface $theme,
@@ -46,7 +46,7 @@ final class CompositeTemplateLocatorSpec extends ObjectBehavior
         $this->locate('template.html.twig', $theme)->shouldReturn('located.html.twig');
     }
 
-    function it_locates_a_template_ignoring_locator_failures(
+    public function it_locates_a_template_ignoring_locator_failures(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
         ThemeInterface $theme,
@@ -60,7 +60,7 @@ final class CompositeTemplateLocatorSpec extends ObjectBehavior
         $this->locate('template.html.twig', $theme)->shouldReturn('located.html.twig');
     }
 
-    function it_throws_an_exception_if_no_locator_supports_given_template(
+    public function it_throws_an_exception_if_no_locator_supports_given_template(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
         ThemeInterface $theme,
@@ -76,7 +76,7 @@ final class CompositeTemplateLocatorSpec extends ObjectBehavior
         $this->shouldThrow(TemplateNotFoundException::class)->during('locate', ['template.html.twig', $theme]);
     }
 
-    function it_throws_an_exception_if_no_locator_returns_meaningful_response(
+    public function it_throws_an_exception_if_no_locator_returns_meaningful_response(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
         ThemeInterface $theme,
@@ -92,7 +92,7 @@ final class CompositeTemplateLocatorSpec extends ObjectBehavior
         $this->shouldThrow(TemplateNotFoundException::class)->during('locate', ['template.html.twig', $theme]);
     }
 
-    function it_supports_locating_a_template_if_one_of_locators_does(
+    public function it_supports_locating_a_template_if_one_of_locators_does(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
     ): void {
@@ -102,7 +102,7 @@ final class CompositeTemplateLocatorSpec extends ObjectBehavior
         $this->supports('template.html.twig')->shouldReturn(true);
     }
 
-    function it_does_not_support_locating_a_template_if_no_locator_does(
+    public function it_does_not_support_locating_a_template_if_no_locator_does(
         TemplateLocatorInterface $firstTemplateLocator,
         TemplateLocatorInterface $secondTemplateLocator,
     ): void {

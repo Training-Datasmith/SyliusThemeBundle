@@ -22,17 +22,17 @@ use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
 
 final class PathResolverSpec extends ObjectBehavior
 {
-    function let(AssetsProviderInterface $assetsProvider, FilesystemInterface $filesystem): void
+    public function let(AssetsProviderInterface $assetsProvider, FilesystemInterface $filesystem): void
     {
         $this->beConstructedWith($assetsProvider, $filesystem);
     }
 
-    function it_implements_path_resolver_interface(): void
+    public function it_implements_path_resolver_interface(): void
     {
         $this->shouldImplement(PathResolverInterface::class);
     }
 
-    function it_returns_modified_path_if_its_referencing_bundle_asset(
+    public function it_returns_modified_path_if_its_referencing_bundle_asset(
         AssetsProviderInterface $assetsProvider,
         FilesystemInterface $filesystem,
         ThemeInterface $theme,
@@ -57,7 +57,7 @@ final class PathResolverSpec extends ObjectBehavior
         $this->resolve('/root/bundles/easy/asset.min.js', '/root/', $theme)->shouldReturn('/root/_themes/theme/name/bundles/easy/asset.min.js');
     }
 
-    function it_returns_modified_path_if_its_referencing_root_asset(
+    public function it_returns_modified_path_if_its_referencing_root_asset(
         AssetsProviderInterface $assetsProvider,
         FilesystemInterface $filesystem,
         ThemeInterface $theme,
@@ -75,7 +75,7 @@ final class PathResolverSpec extends ObjectBehavior
         $this->resolve('/root/asset.min.js', '/root/', $theme)->shouldReturn('/root/_themes/theme/name/asset.min.js');
     }
 
-    function it_prepends_theme_path_if_the_base_path_is_not_found(
+    public function it_prepends_theme_path_if_the_base_path_is_not_found(
         AssetsProviderInterface $assetsProvider,
         FilesystemInterface $filesystem,
         ThemeInterface $theme,
@@ -107,7 +107,7 @@ final class PathResolverSpec extends ObjectBehavior
         $this->resolve('bundles/easy/asset.min.js', '/lol', $theme)->shouldReturn('/_themes/theme/name/bundles/easy/asset.min.js');
     }
 
-    function it_fallbacks_to_default_path_if_could_not_find_themed_asset(
+    public function it_fallbacks_to_default_path_if_could_not_find_themed_asset(
         AssetsProviderInterface $assetsProvider,
         FilesystemInterface $filesystem,
         ThemeInterface $theme,
