@@ -28,7 +28,7 @@ final class TestThemeConfigurationManager implements TestThemeConfigurationManag
     {
         $this->configurationProcessor = $configurationProcessor;
         $this->filesystem = new Filesystem();
-        $this->configurationsFile = rtrim($cacheDir, '/') . '/_test_themes/data.serialized';
+        $this->configurationsFile = rtrim($cacheDir, '/') . '/_test_themes/data.json';
     }
 
     public function findAll(): array
@@ -76,12 +76,14 @@ final class TestThemeConfigurationManager implements TestThemeConfigurationManag
 
     private function load(): array
     {
-        return unserialize((string) file_get_contents($this->configurationsFile));
+        $decoded = json_decode((string) file_get_contents($this->configurationsFile), true);
+
+        return \is_array($decoded) ? $decoded : [];
     }
 
     private function save(array $configurations): void
     {
-        file_put_contents($this->configurationsFile, serialize($configurations));
+        file_put_contents($this->configurationsFile, json_encode($configurations));
     }
 
     private function initializeIfNeeded(): void
