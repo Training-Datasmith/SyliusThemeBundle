@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Factory;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Factory;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-interface ThemeFactoryInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+interface Theme_Factory_Interface
 {
-    public function create(string $name, string $path): ThemeInterface;
+    public function create(string $name, string $path): Theme_Interface;
 }

@@ -8,80 +8,55 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Locator;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Locator;
-
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Symfony\Component\Finder\SplFileInfo;
-
-final readonly class RecursiveFileLocator implements FileLocatorInterface
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Symfony\Component\Finder\Spl_File_Info;
+final readonly class Recursive_File_Locator implements File_Locator_Interface
 {
     /**
      * @param array|string[] $paths An array of paths where to look for resources
      * @param int|null $depth Restrict depth to search for configuration file inside theme folder
      */
-    public function __construct(private FinderFactoryInterface $finderFactory, private array $paths, private ?int $depth = null)
+    public function __construct(private Finder_Factory_Interface $finder_factory, private array $paths, private ?int $depth = null)
     {
     }
-
-    public function locateFileNamed(string $name): string
+    public function locate_file_named(string $name): string
     {
-        return $this->doLocateFilesNamed($name)->current();
+        return $this->do_locate_files_named($name)->current();
     }
-
-    public function locateFilesNamed(string $name): array
+    public function locate_files_named(string $name): array
     {
-        return iterator_to_array($this->doLocateFilesNamed($name));
+        return iterator_to_array($this->do_locate_files_named($name));
     }
-
-    private function doLocateFilesNamed(string $name): \Generator
+    private function do_locate_files_named(string $name): \Generator
     {
-        $this->assertNameIsNotEmpty($name);
-
+        $this->assert_name_is_not_empty($name);
         $found = false;
         foreach ($this->paths as $path) {
             try {
-                $finder = $this->finderFactory->create();
-
+                $finder = $this->finder_factory->create();
                 if ($this->depth !== null) {
                     $finder->depth(sprintf('<= %d', $this->depth));
                 }
-
-                $finder
-                    ->files()
-                    ->followLinks()
-                    ->name($name)
-                    ->ignoreUnreadableDirs()
-                    ->in($path)
-                ;
-
+                $finder->files()->follow_links()->name($name)->ignore_unreadable_dirs()->in($path);
                 /** @var SplFileInfo $file */
                 foreach ($finder as $file) {
                     $found = true;
-
-                    yield $file->getPathname();
+                    yield $file->get_pathname();
                 }
             } catch (\InvalidArgumentException) {
             }
         }
-
         if (false === $found) {
-            throw new \InvalidArgumentException(sprintf(
-                'The file "%s" does not exist (searched in the following directories: %s).',
-                $name,
-                implode(', ', $this->paths),
-            ));
+            throw new \InvalidArgumentException(sprintf('The file "%s" does not exist (searched in the following directories: %s).', $name, implode(', ', $this->paths)));
         }
     }
-
-    private function assertNameIsNotEmpty(string $name): void
+    private function assert_name_is_not_empty(string $name): void
     {
         if ('' === $name) {
-            throw new \InvalidArgumentException(
-                'An empty file name is not valid to be located.',
-            );
+            throw new \InvalidArgumentException('An empty file name is not valid to be located.');
         }
     }
 }

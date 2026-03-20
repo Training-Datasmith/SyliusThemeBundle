@@ -8,16 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Context;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Context;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-final class EmptyThemeContext implements ThemeContextInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+final class Empty_Theme_Context implements Theme_Context_Interface
 {
-    public function getTheme(): ?ThemeInterface
+    public function get_theme(): ?Theme_Interface
     {
         return null;
     }

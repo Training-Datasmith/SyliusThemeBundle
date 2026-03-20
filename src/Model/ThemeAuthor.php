@@ -8,57 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Model;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Model;
-
-final class ThemeAuthor
+final class Theme_Author
 {
     private ?string $name = null;
-
     private ?string $email = null;
-
     private ?string $homepage = null;
-
     private ?string $role = null;
-
-    public function getName(): ?string
+    public function get_name(): ?string
     {
         return $this->name;
     }
-
-    public function setName(?string $name): void
+    public function set_name(?string $name): void
     {
         $this->name = $name;
     }
-
-    public function getEmail(): ?string
+    public function get_email(): ?string
     {
         return $this->email;
     }
-
-    public function setEmail(?string $email): void
+    public function set_email(?string $email): void
     {
         $this->email = $email;
     }
-
-    public function getHomepage(): ?string
+    public function get_homepage(): ?string
     {
         return $this->homepage;
     }
-
-    public function setHomepage(?string $homepage): void
+    public function set_homepage(?string $homepage): void
     {
         $this->homepage = $homepage;
     }
-
-    public function getRole(): ?string
+    public function get_role(): ?string
     {
         return $this->role;
     }
-
-    public function setRole(?string $role): void
+    public function set_role(?string $role): void
     {
         $this->role = $role;
     }

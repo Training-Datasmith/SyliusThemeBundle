@@ -8,117 +8,93 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Loader;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Loader;
-
-use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationProviderInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeAuthorFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeScreenshotFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Model\ThemeAuthor;
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-use Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot;
-
-final readonly class ThemeLoader implements ThemeLoaderInterface
+use Sylius\Bundle\Theme_Bundle\Configuration\Configuration_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Author_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Screenshot_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Author;
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Screenshot;
+final readonly class Theme_Loader implements Theme_Loader_Interface
 {
-    public function __construct(private ConfigurationProviderInterface $configurationProvider, private ThemeFactoryInterface $themeFactory, private ThemeAuthorFactoryInterface $themeAuthorFactory, private ThemeScreenshotFactoryInterface $themeScreenshotFactory, private CircularDependencyCheckerInterface $circularDependencyChecker)
+    public function __construct(private Configuration_Provider_Interface $configuration_provider, private Theme_Factory_Interface $theme_factory, private Theme_Author_Factory_Interface $theme_author_factory, private Theme_Screenshot_Factory_Interface $theme_screenshot_factory, private Circular_Dependency_Checker_Interface $circular_dependency_checker)
     {
     }
-
     public function load(): array
     {
-        $configurations = $this->configurationProvider->getConfigurations();
-
-        $themes = $this->hydrateThemes($configurations);
-
-        $this->checkForCircularDependencies($themes);
-
+        $configurations = $this->configuration_provider->get_configurations();
+        $themes = $this->hydrate_themes($configurations);
+        $this->check_for_circular_dependencies($themes);
         return array_values($themes);
     }
-
     /**
      * @return ThemeInterface[]
      */
-    private function hydrateThemes(array $configurations): array
+    private function hydrate_themes(array $configurations): array
     {
         $themes = [];
-
         foreach ($configurations as $configuration) {
-            $themes[$configuration['name']] = $this->themeFactory->create($configuration['name'], $configuration['path']);
+            $themes[$configuration['name']] = $this->theme_factory->create($configuration['name'], $configuration['path']);
         }
-
         foreach ($configurations as $configuration) {
             $theme = $themes[$configuration['name']];
-
-            $theme->setTitle($configuration['title'] ?? null);
-            $theme->setDescription($configuration['description'] ?? null);
-
-            $parentThemes = $this->convertParentsNamesToParentsObjects($configuration['name'], $configuration['parents'], $themes);
-            foreach ($parentThemes as $parentTheme) {
-                $theme->addParent($parentTheme);
+            $theme->set_title($configuration['title'] ?? null);
+            $theme->set_description($configuration['description'] ?? null);
+            $parent_themes = $this->convert_parents_names_to_parents_objects($configuration['name'], $configuration['parents'], $themes);
+            foreach ($parent_themes as $parent_theme) {
+                $theme->add_parent($parent_theme);
             }
-
-            $themeAuthors = $this->convertAuthorsArraysToAuthorsObjects($configuration['authors']);
-            foreach ($themeAuthors as $themeAuthor) {
-                $theme->addAuthor($themeAuthor);
+            $theme_authors = $this->convert_authors_arrays_to_authors_objects($configuration['authors']);
+            foreach ($theme_authors as $theme_author) {
+                $theme->add_author($theme_author);
             }
-
-            $themeScreenshots = $this->convertScreenshotsArraysToScreenshotsObjects($configuration['screenshots']);
-            foreach ($themeScreenshots as $themeScreenshot) {
-                $theme->addScreenshot($themeScreenshot);
+            $theme_screenshots = $this->convert_screenshots_arrays_to_screenshots_objects($configuration['screenshots']);
+            foreach ($theme_screenshots as $theme_screenshot) {
+                $theme->add_screenshot($theme_screenshot);
             }
         }
-
         return $themes;
     }
-
     /**
      * @param array|ThemeInterface[] $themes
      */
-    private function checkForCircularDependencies(array $themes): void
+    private function check_for_circular_dependencies(array $themes): void
     {
         try {
             foreach ($themes as $theme) {
-                $this->circularDependencyChecker->check($theme);
+                $this->circular_dependency_checker->check($theme);
             }
-        } catch (CircularDependencyFoundException $exception) {
-            throw new ThemeLoadingFailedException('Circular dependency found.', 0, $exception);
+        } catch (Circular_Dependency_Found_Exception $exception) {
+            throw new Theme_Loading_Failed_Exception('Circular dependency found.', 0, $exception);
         }
     }
-
     /**
      * @return array|ThemeInterface[]
      */
-    private function convertParentsNamesToParentsObjects(string $themeName, array $parentsNames, array $existingThemes): array
+    private function convert_parents_names_to_parents_objects(string $theme_name, array $parents_names, array $existing_themes): array
     {
-        return array_map(function (string $parentName) use ($themeName, $existingThemes): ThemeInterface {
-            if (!isset($existingThemes[$parentName])) {
-                throw new ThemeLoadingFailedException(sprintf(
-                    'Unexisting theme "%s" is required by "%s".',
-                    $parentName,
-                    $themeName,
-                ));
+        return array_map(function (string $parent_name) use ($theme_name, $existing_themes): Theme_Interface {
+            if (!isset($existing_themes[$parent_name])) {
+                throw new Theme_Loading_Failed_Exception(sprintf('Unexisting theme "%s" is required by "%s".', $parent_name, $theme_name));
             }
-
-            return $existingThemes[$parentName];
-        }, $parentsNames);
+            return $existing_themes[$parent_name];
+        }, $parents_names);
     }
-
     /**
      * @return array|ThemeAuthor[]
      */
-    private function convertAuthorsArraysToAuthorsObjects(array $authorsArrays): array
+    private function convert_authors_arrays_to_authors_objects(array $authors_arrays): array
     {
-        return array_map(fn (array $authorArray): ThemeAuthor => $this->themeAuthorFactory->createFromArray($authorArray), $authorsArrays);
+        return array_map(fn(array $author_array): Theme_Author => $this->theme_author_factory->create_from_array($author_array), $authors_arrays);
     }
-
     /**
      * @return array|ThemeScreenshot[]
      */
-    private function convertScreenshotsArraysToScreenshotsObjects(array $screenshotsArrays): array
+    private function convert_screenshots_arrays_to_screenshots_objects(array $screenshots_arrays): array
     {
-        return array_map(fn (array $screenshotArray): ThemeScreenshot => $this->themeScreenshotFactory->createFromArray($screenshotArray), $screenshotsArrays);
+        return array_map(fn(array $screenshot_array): Theme_Screenshot => $this->theme_screenshot_factory->create_from_array($screenshot_array), $screenshots_arrays);
     }
 }

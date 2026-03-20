@@ -8,46 +8,36 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Form\Type;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Form\Type;
-
-use Sylius\Bundle\ThemeBundle\Repository\ThemeRepositoryInterface;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-final class ThemeNameChoiceType extends AbstractType
+use Sylius\Bundle\Theme_Bundle\Repository\Theme_Repository_Interface;
+use Symfony\Component\Form\Abstract_Type;
+use Symfony\Component\Form\Extension\Core\Type\Choice_Type;
+use Symfony\Component\Options_Resolver\Options;
+use Symfony\Component\Options_Resolver\Options_Resolver;
+final class Theme_Name_Choice_Type extends Abstract_Type
 {
-    public function __construct(private readonly ThemeRepositoryInterface $themeRepository)
+    public function __construct(private readonly Theme_Repository_Interface $theme_repository)
     {
     }
-
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configure_options(Options_Resolver $resolver): void
     {
-        $resolver->setDefaults([
-            'choices' => function (Options $options): array {
-                $themes = $this->themeRepository->findAll();
-
-                $choices = [];
-                foreach ($themes as $theme) {
-                    $title = $theme->getTitle();
-                    $choices[$title ?? $theme->getName()] = $theme->getName();
-                }
-
-                return $choices;
-            },
-        ]);
+        $resolver->set_defaults(['choices' => function (Options $options): array {
+            $themes = $this->theme_repository->find_all();
+            $choices = [];
+            foreach ($themes as $theme) {
+                $title = $theme->get_title();
+                $choices[$title ?? $theme->get_name()] = $theme->get_name();
+            }
+            return $choices;
+        }]);
     }
-
-    public function getParent(): string
+    public function get_parent(): string
     {
-        return ChoiceType::class;
+        return Choice_Type::class;
     }
-
-    public function getBlockPrefix(): string
+    public function get_block_prefix(): string
     {
         return 'sylius_theme_name_choice';
     }

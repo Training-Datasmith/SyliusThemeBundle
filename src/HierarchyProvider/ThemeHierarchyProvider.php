@@ -8,25 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Hierarchy_Provider;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\HierarchyProvider;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-final class ThemeHierarchyProvider implements ThemeHierarchyProviderInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+final class Theme_Hierarchy_Provider implements Theme_Hierarchy_Provider_Interface
 {
-    public function getThemeHierarchy(ThemeInterface $theme): array
+    public function get_theme_hierarchy(Theme_Interface $theme): array
     {
         $parents = [];
-        foreach ($theme->getParents() as $parent) {
-            $parents = array_merge(
-                $parents,
-                $this->getThemeHierarchy($parent),
-            );
+        foreach ($theme->get_parents() as $parent) {
+            $parents = array_merge($parents, $this->get_theme_hierarchy($parent));
         }
-
         return array_merge([$theme], $parents);
     }
 }

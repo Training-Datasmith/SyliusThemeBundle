@@ -8,75 +8,64 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Twig\Loader;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Twig\Loader;
-
-use Sylius\Bundle\ThemeBundle\Context\ThemeContextInterface;
-use Sylius\Bundle\ThemeBundle\Twig\Locator\TemplateLocatorInterface;
-use Sylius\Bundle\ThemeBundle\Twig\Locator\TemplateNotFoundException;
-use Twig\Loader\LoaderInterface as TwigLoaderInterface;
+use Sylius\Bundle\Theme_Bundle\Context\Theme_Context_Interface;
+use Sylius\Bundle\Theme_Bundle\Twig\Locator\Template_Locator_Interface;
+use Sylius\Bundle\Theme_Bundle\Twig\Locator\Template_Not_Found_Exception;
+use Twig\Loader\Loader_Interface as TwigLoaderInterface;
 use Twig\Source;
-
-final readonly class ThemedTemplateLoader implements LoaderInterface
+final readonly class Themed_Template_Loader implements Loader_Interface
 {
-    public function __construct(private TwigLoaderInterface $decoratedLoader, private TemplateLocatorInterface $templateLocator, private ThemeContextInterface $themeContext)
+    public function __construct(private Twig_Loader_Interface $decorated_loader, private Template_Locator_Interface $template_locator, private Theme_Context_Interface $theme_context)
     {
     }
-
-    public function getSourceContext(string $name): Source
+    public function get_source_context(string $name): Source
     {
         try {
-            $path = $this->locateTemplate($name);
-
+            $path = $this->locate_template($name);
             return new Source((string) file_get_contents($path), $name, $path);
-        } catch (TemplateNotFoundException) {
-            return $this->decoratedLoader->getSourceContext($name);
+        } catch (Template_Not_Found_Exception) {
+            return $this->decorated_loader->get_source_context($name);
         }
     }
-
-    public function getCacheKey(string $name): string
+    public function get_cache_key(string $name): string
     {
         try {
-            return $this->locateTemplate($name);
-        } catch (TemplateNotFoundException) {
-            return $this->decoratedLoader->getCacheKey($name);
+            return $this->locate_template($name);
+        } catch (Template_Not_Found_Exception) {
+            return $this->decorated_loader->get_cache_key($name);
         }
     }
-
     /**
      * @param int $time
      */
-    public function isFresh(string $name, $time): bool
+    public function is_fresh(string $name, $time): bool
     {
         try {
-            return filemtime($this->locateTemplate($name)) <= $time;
-        } catch (TemplateNotFoundException) {
-            return $this->decoratedLoader->isFresh($name, $time);
+            return filemtime($this->locate_template($name)) <= $time;
+        } catch (Template_Not_Found_Exception) {
+            return $this->decorated_loader->is_fresh($name, $time);
         }
     }
-
     public function exists(string $name): bool
     {
         try {
-            return stat($this->locateTemplate($name)) !== false;
-        } catch (TemplateNotFoundException) {
-            return $this->decoratedLoader->exists($name);
+            return stat($this->locate_template($name)) !== false;
+        } catch (Template_Not_Found_Exception) {
+            return $this->decorated_loader->exists($name);
         }
     }
-
     /**
      * @throws TemplateNotFoundException
      */
-    private function locateTemplate(string $template): string
+    private function locate_template(string $template): string
     {
-        $theme = $this->themeContext->getTheme();
-
+        $theme = $this->theme_context->get_theme();
         if ($theme === null) {
-            throw new TemplateNotFoundException($template, []);
+            throw new Template_Not_Found_Exception($template, []);
         }
-
-        return $this->templateLocator->locate($template, $theme);
+        return $this->template_locator->locate($template, $theme);
     }
 }

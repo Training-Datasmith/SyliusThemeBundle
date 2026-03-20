@@ -8,39 +8,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Dependency_Injection\Compiler;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\DependencyInjection\Compiler;
-
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Loader\TranslatorLoaderProviderInterface;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-
-final class TranslatorLoaderProviderPass implements CompilerPassInterface
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Loader\Translator_Loader_Provider_Interface;
+use Symfony\Component\Dependency_Injection\Compiler\Compiler_Pass_Interface;
+use Symfony\Component\Dependency_Injection\Container_Builder;
+use Symfony\Component\Dependency_Injection\Reference;
+final class Translator_Loader_Provider_Pass implements Compiler_Pass_Interface
 {
-    public function process(ContainerBuilder $container): void
+    public function process(Container_Builder $container): void
     {
         try {
-            $loaderProvider = $container->findDefinition(TranslatorLoaderProviderInterface::class);
+            $loader_provider = $container->find_definition(Translator_Loader_Provider_Interface::class);
         } catch (\InvalidArgumentException) {
             return;
         }
-
-        $taggedServices = $container->findTaggedServiceIds('translation.loader');
+        $tagged_services = $container->find_tagged_service_ids('translation.loader');
         $loaders = [];
-        foreach ($taggedServices as $id => $attributes) {
-            $loader = $container->findDefinition($id);
-            $loader->setLazy(true);
-
+        foreach ($tagged_services as $id => $attributes) {
+            $loader = $container->find_definition($id);
+            $loader->set_lazy(true);
             $loaders[$attributes[0]['alias']] = new Reference($id);
-
             if (isset($attributes[0]['legacy-alias'])) {
                 $loaders[$attributes[0]['legacy-alias']] = new Reference($id);
             }
         }
-
-        $loaderProvider->replaceArgument(0, $loaders);
+        $loader_provider->replace_argument(0, $loaders);
     }
 }

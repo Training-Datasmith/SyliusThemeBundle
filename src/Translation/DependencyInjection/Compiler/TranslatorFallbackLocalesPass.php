@@ -8,30 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Dependency_Injection\Compiler;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\DependencyInjection\Compiler;
-
-use Sylius\Bundle\ThemeBundle\Translation\Translator;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-final class TranslatorFallbackLocalesPass implements CompilerPassInterface
+use Sylius\Bundle\Theme_Bundle\Translation\Translator;
+use Symfony\Component\Dependency_Injection\Compiler\Compiler_Pass_Interface;
+use Symfony\Component\Dependency_Injection\Container_Builder;
+final class Translator_Fallback_Locales_Pass implements Compiler_Pass_Interface
 {
-    public function process(ContainerBuilder $container): void
+    public function process(Container_Builder $container): void
     {
         try {
-            $symfonyTranslator = $container->findDefinition('translator.default');
-            $syliusTranslator = $container->findDefinition(Translator::class);
+            $symfony_translator = $container->find_definition('translator.default');
+            $sylius_translator = $container->find_definition(Translator::class);
         } catch (\InvalidArgumentException) {
             return;
         }
-
-        $methodCalls = array_filter($symfonyTranslator->getMethodCalls(), static fn (array $methodCall): bool => 'setFallbackLocales' === $methodCall[0]);
-
-        foreach ($methodCalls as $methodCall) {
-            $syliusTranslator->addMethodCall($methodCall[0], $methodCall[1]);
+        $method_calls = array_filter($symfony_translator->get_method_calls(), static fn(array $method_call): bool => 'setFallbackLocales' === $method_call[0]);
+        foreach ($method_calls as $method_call) {
+            $sylius_translator->add_method_call($method_call[0], $method_call[1]);
         }
     }
 }

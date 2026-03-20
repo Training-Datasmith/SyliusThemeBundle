@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Twig\Locator;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Twig\Locator;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-final readonly class CompositeTemplateLocator implements TemplateLocatorInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+final readonly class Composite_Template_Locator implements Template_Locator_Interface
 {
     /**
      * @psalm-param iterable<TemplateLocatorInterface> $themedTemplateLocators
@@ -25,35 +22,31 @@ final readonly class CompositeTemplateLocator implements TemplateLocatorInterfac
         /**
          * @psalm-var iterable<TemplateLocatorInterface>
          */
-        private iterable $themedTemplateLocators
-    ) {
-    }
-
-    public function locate(string $template, ThemeInterface $theme): string
+        private iterable $themed_template_locators
+    )
     {
-        foreach ($this->themedTemplateLocators as $themedTemplateLocator) {
-            if (!$themedTemplateLocator->supports($template)) {
+    }
+    public function locate(string $template, Theme_Interface $theme): string
+    {
+        foreach ($this->themed_template_locators as $themed_template_locator) {
+            if (!$themed_template_locator->supports($template)) {
                 continue;
             }
-
             try {
-                return $themedTemplateLocator->locate($template, $theme);
-            } catch (TemplateNotFoundException) {
+                return $themed_template_locator->locate($template, $theme);
+            } catch (Template_Not_Found_Exception) {
                 // Do nothing.
             }
         }
-
-        throw new TemplateNotFoundException($template, [$theme]);
+        throw new Template_Not_Found_Exception($template, [$theme]);
     }
-
     public function supports(string $template): bool
     {
-        foreach ($this->themedTemplateLocators as $themedTemplateLocator) {
-            if ($themedTemplateLocator->supports($template)) {
+        foreach ($this->themed_template_locators as $themed_template_locator) {
+            if ($themed_template_locator->supports($template)) {
                 return true;
             }
         }
-
         return false;
     }
 }

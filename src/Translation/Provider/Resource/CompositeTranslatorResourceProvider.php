@@ -8,39 +8,31 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Resource;
-
-final readonly class CompositeTranslatorResourceProvider implements TranslatorResourceProviderInterface
+final readonly class Composite_Translator_Resource_Provider implements Translator_Resource_Provider_Interface
 {
     /**
      * @param TranslatorResourceProviderInterface[] $resourceProviders
      */
-    public function __construct(private array $resourceProviders = [])
+    public function __construct(private array $resource_providers = [])
     {
     }
-
-    public function getResources(): array
+    public function get_resources(): array
     {
         $resources = [];
-
-        foreach ($this->resourceProviders as $resourceProvider) {
-            $resources = array_merge($resources, $resourceProvider->getResources());
+        foreach ($this->resource_providers as $resource_provider) {
+            $resources = array_merge($resources, $resource_provider->get_resources());
         }
-
         return $resources;
     }
-
-    public function getResourcesLocales(): array
+    public function get_resources_locales(): array
     {
-        $resourcesLocales = [];
-
-        foreach ($this->resourceProviders as $resourceProvider) {
-            $resourcesLocales = array_merge($resourcesLocales, $resourceProvider->getResourcesLocales());
+        $resources_locales = [];
+        foreach ($this->resource_providers as $resource_provider) {
+            $resources_locales = array_merge($resources_locales, $resource_provider->get_resources_locales());
         }
-
-        return array_values(array_unique($resourcesLocales));
+        return array_values(array_unique($resources_locales));
     }
 }

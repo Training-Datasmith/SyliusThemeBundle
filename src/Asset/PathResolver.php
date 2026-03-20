@@ -8,60 +8,46 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Asset;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Asset;
-
-use Sylius\Bundle\ThemeBundle\Asset\Installer\AssetsProviderInterface;
-use Sylius\Bundle\ThemeBundle\Filesystem\FilesystemInterface;
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-final readonly class PathResolver implements PathResolverInterface
+use Sylius\Bundle\Theme_Bundle\Asset\Installer\Assets_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Filesystem\Filesystem_Interface;
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+final readonly class Path_Resolver implements Path_Resolver_Interface
 {
-    public function __construct(private AssetsProviderInterface $assetsProvider, private FilesystemInterface $filesystem)
+    public function __construct(private Assets_Provider_Interface $assets_provider, private Filesystem_Interface $filesystem)
     {
     }
-
-    public function resolve(string $path, string $basePath, ThemeInterface $theme): string
+    public function resolve(string $path, string $base_path, Theme_Interface $theme): string
     {
-        $basePath = rtrim($basePath, '/');
-
-        if ($basePath === '' || !str_contains($path, $basePath)) {
-            $basePathPositionAtPath = 0;
-            $basePathLength = 0;
+        $base_path = rtrim($base_path, '/');
+        if ($base_path === '' || !str_contains($path, $base_path)) {
+            $base_path_position_at_path = 0;
+            $base_path_length = 0;
         } else {
-            $basePathPositionAtPath = strpos($path, $basePath);
-            $basePathLength = strlen($basePath);
+            $base_path_position_at_path = strpos($path, $base_path);
+            $base_path_length = strlen($base_path);
         }
-
-        $relativePath = trim(substr($path, $basePathPositionAtPath + $basePathLength), '/');
-
-        if ($this->shouldPathBeModified($relativePath, $theme)) {
-            $prefixPath = rtrim(substr($path, $basePathPositionAtPath, $basePathLength), '/');
-
-            return sprintf('%s/_themes/%s/%s', $prefixPath, $theme->getName(), $relativePath);
+        $relative_path = trim(substr($path, $base_path_position_at_path + $base_path_length), '/');
+        if ($this->should_path_be_modified($relative_path, $theme)) {
+            $prefix_path = rtrim(substr($path, $base_path_position_at_path, $base_path_length), '/');
+            return sprintf('%s/_themes/%s/%s', $prefix_path, $theme->get_name(), $relative_path);
         }
-
         return $path;
     }
-
-    private function shouldPathBeModified(string $relativePath, ThemeInterface $theme): bool
+    private function should_path_be_modified(string $relative_path, Theme_Interface $theme): bool
     {
-        foreach ($this->assetsProvider->provideDirectoriesForTheme($theme) as $originDir => $targetDir) {
-            $targetDir = trim($targetDir, '/');
-
-            if ($targetDir !== '' && !str_contains($relativePath, $targetDir)) {
+        foreach ($this->assets_provider->provide_directories_for_theme($theme) as $origin_dir => $target_dir) {
+            $target_dir = trim($target_dir, '/');
+            if ($target_dir !== '' && !str_contains($relative_path, $target_dir)) {
                 continue;
             }
-
-            if (!$this->filesystem->exists($originDir . '/' . ltrim(str_replace($targetDir, '', $relativePath), '/'))) {
+            if (!$this->filesystem->exists($origin_dir . '/' . ltrim(str_replace($target_dir, '', $relative_path), '/'))) {
                 continue;
             }
-
             return true;
         }
-
         return false;
     }
 }

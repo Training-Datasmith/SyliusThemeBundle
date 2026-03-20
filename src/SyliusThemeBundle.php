@@ -8,31 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle;
-
-use Sylius\Bundle\ThemeBundle\Configuration\Filesystem\FilesystemConfigurationSourceFactory;
-use Sylius\Bundle\ThemeBundle\Configuration\Test\TestConfigurationSourceFactory;
-use Sylius\Bundle\ThemeBundle\DependencyInjection\SyliusThemeExtension;
-use Sylius\Bundle\ThemeBundle\Translation\DependencyInjection\Compiler\TranslatorFallbackLocalesPass;
-use Sylius\Bundle\ThemeBundle\Translation\DependencyInjection\Compiler\TranslatorLoaderProviderPass;
-use Sylius\Bundle\ThemeBundle\Translation\DependencyInjection\Compiler\TranslatorResourceProviderPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-final class SyliusThemeBundle extends Bundle
+use Sylius\Bundle\Theme_Bundle\Configuration\Filesystem\Filesystem_Configuration_Source_Factory;
+use Sylius\Bundle\Theme_Bundle\Configuration\Test\Test_Configuration_Source_Factory;
+use Sylius\Bundle\Theme_Bundle\Dependency_Injection\Sylius_Theme_Extension;
+use Sylius\Bundle\Theme_Bundle\Translation\Dependency_Injection\Compiler\Translator_Fallback_Locales_Pass;
+use Sylius\Bundle\Theme_Bundle\Translation\Dependency_Injection\Compiler\Translator_Loader_Provider_Pass;
+use Sylius\Bundle\Theme_Bundle\Translation\Dependency_Injection\Compiler\Translator_Resource_Provider_Pass;
+use Symfony\Component\Dependency_Injection\Container_Builder;
+use Symfony\Component\Http_Kernel\Bundle\Bundle;
+final class Sylius_Theme_Bundle extends Bundle
 {
-    public function build(ContainerBuilder $container): void
+    public function build(Container_Builder $container): void
     {
         /** @var SyliusThemeExtension $themeExtension */
-        $themeExtension = $container->getExtension('sylius_theme');
-        $themeExtension->addConfigurationSourceFactory(new FilesystemConfigurationSourceFactory());
-        $themeExtension->addConfigurationSourceFactory(new TestConfigurationSourceFactory());
-
-        $container->addCompilerPass(new TranslatorFallbackLocalesPass());
-        $container->addCompilerPass(new TranslatorLoaderProviderPass());
-        $container->addCompilerPass(new TranslatorResourceProviderPass());
+        $theme_extension = $container->get_extension('sylius_theme');
+        $theme_extension->add_configuration_source_factory(new Filesystem_Configuration_Source_Factory());
+        $theme_extension->add_configuration_source_factory(new Test_Configuration_Source_Factory());
+        $container->add_compiler_pass(new Translator_Fallback_Locales_Pass());
+        $container->add_compiler_pass(new Translator_Loader_Provider_Pass());
+        $container->add_compiler_pass(new Translator_Resource_Provider_Pass());
     }
 }

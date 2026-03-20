@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Asset\Installer;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Asset\Installer;
-
-use Symfony\Component\Console\Output\OutputInterface;
-
-interface OutputAwareInterface
+use Symfony\Component\Console\Output\Output_Interface;
+interface Output_Aware_Interface
 {
-    public function setOutput(OutputInterface $output): void;
+    public function set_output(Output_Interface $output): void;
 }

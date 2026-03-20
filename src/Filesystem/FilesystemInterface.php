@@ -8,15 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Filesystem;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Filesystem;
-
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-
-interface FilesystemInterface
+use Symfony\Component\Filesystem\Exception\File_Not_Found_Exception;
+use Symfony\Component\Filesystem\Exception\Io_Exception;
+interface Filesystem_Interface
 {
     /**
      * Copies a file.
@@ -28,8 +25,7 @@ interface FilesystemInterface
      * @throws FileNotFoundException When originFile doesn't exist
      * @throws IOException           When copy fails
      */
-    public function copy(string $originFile, string $targetFile, bool $override = false);
-
+    public function copy(string $origin_file, string $target_file, bool $override = false);
     /**
      * Creates a directory recursively.
      *
@@ -38,7 +34,6 @@ interface FilesystemInterface
      * @throws IOException On any directory creation failure
      */
     public function mkdir($dirs, int $mode = 0777);
-
     /**
      * Checks the existence of files or directories.
      *
@@ -47,7 +42,6 @@ interface FilesystemInterface
      * @return bool true if the file exists, false otherwise
      */
     public function exists($files);
-
     /**
      * Sets access and modification time of file.
      *
@@ -56,7 +50,6 @@ interface FilesystemInterface
      * @throws IOException When touch fails
      */
     public function touch($files, ?int $time = null, ?int $atime = null);
-
     /**
      * Removes files or directories.
      *
@@ -65,7 +58,6 @@ interface FilesystemInterface
      * @throws IOException When removal fails
      */
     public function remove($files);
-
     /**
      * Change mode for an array of files or directories.
      *
@@ -73,8 +65,7 @@ interface FilesystemInterface
      *
      * @throws IOException When the change fail
      */
-    public function chmod($files, int $mode, int $umask = 0000, bool $recursive = false);
-
+    public function chmod($files, int $mode, int $umask = 00, bool $recursive = false);
     /**
      * Change the owner of an array of files or directories.#
      *
@@ -83,7 +74,6 @@ interface FilesystemInterface
      * @throws IOException When the change fail
      */
     public function chown($files, string $user, bool $recursive = false);
-
     /**
      * Change the group of an array of files or directories.
      *
@@ -92,7 +82,6 @@ interface FilesystemInterface
      * @throws IOException When the change fail
      */
     public function chgrp($files, string $group, bool $recursive = false);
-
     /**
      * Renames a file or a directory.
      *
@@ -100,14 +89,12 @@ interface FilesystemInterface
      * @throws IOException When origin cannot be renamed
      */
     public function rename(string $origin, string $target, bool $overwrite = false);
-
     /**
      * Creates a symbolic link or copy a directory.
      *
      * @throws IOException When symlink fails
      */
-    public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = false);
-
+    public function symlink(string $origin_dir, string $target_dir, bool $copy_on_windows = false);
     /**
      * Mirrors a directory to another.
      *
@@ -120,21 +107,18 @@ interface FilesystemInterface
      *
      * @throws IOException When file type is unknown
      */
-    public function mirror(string $originDir, string $targetDir, ?\Traversable $iterator = null, array $options = []);
-
+    public function mirror(string $origin_dir, string $target_dir, ?\Traversable $iterator = null, array $options = []);
     /**
      * Given an existing path, convert it to a path relative to a given starting path.
      *
      * @return string Path of target relative to starting path
      */
-    public function makePathRelative(string $endPath, string $startPath);
-
+    public function make_path_relative(string $end_path, string $start_path);
     /**
      * Returns whether the file path is an absolute path.
      *
      * @return bool
      */
-    public function isAbsolutePath(string $file);
-
-    public function getFileContents(string $file): string;
+    public function is_absolute_path(string $file);
+    public function get_file_contents(string $file): string;
 }

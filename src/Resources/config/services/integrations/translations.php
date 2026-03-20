@@ -8,94 +8,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Symfony\Component\Dependency_Injection\Loader\Configurator;
 
-declare(strict_types=1);
-
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-use Sylius\Bundle\ThemeBundle\Context\ThemeContextInterface;
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Sylius\Bundle\ThemeBundle\HierarchyProvider\ThemeHierarchyProviderInterface;
-use Sylius\Bundle\ThemeBundle\Repository\ThemeRepositoryInterface;
-use Sylius\Bundle\ThemeBundle\Translation\Finder\OrderingTranslationFilesFinder;
-use Sylius\Bundle\ThemeBundle\Translation\Finder\TranslationFilesFinder;
-use Sylius\Bundle\ThemeBundle\Translation\Finder\TranslationFilesFinderInterface;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Loader\TranslatorLoaderProvider;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Loader\TranslatorLoaderProviderInterface;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Resource\CompositeTranslatorResourceProvider;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Resource\SymfonyTranslatorResourceProvider;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Resource\ThemeTranslatorResourceProvider;
-use Sylius\Bundle\ThemeBundle\Translation\Provider\Resource\TranslatorResourceProviderInterface;
-use Sylius\Bundle\ThemeBundle\Translation\ThemeAwareTranslator;
-use Sylius\Bundle\ThemeBundle\Translation\Translator;
-
-return static function (ContainerConfigurator $container): void {
+use Sylius\Bundle\Theme_Bundle\Context\Theme_Context_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Hierarchy_Provider\Theme_Hierarchy_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Repository\Theme_Repository_Interface;
+use Sylius\Bundle\Theme_Bundle\Translation\Finder\Ordering_Translation_Files_Finder;
+use Sylius\Bundle\Theme_Bundle\Translation\Finder\Translation_Files_Finder;
+use Sylius\Bundle\Theme_Bundle\Translation\Finder\Translation_Files_Finder_Interface;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Loader\Translator_Loader_Provider;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Loader\Translator_Loader_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource\Composite_Translator_Resource_Provider;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource\Symfony_Translator_Resource_Provider;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource\Theme_Translator_Resource_Provider;
+use Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource\Translator_Resource_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Translation\Theme_Aware_Translator;
+use Sylius\Bundle\Theme_Bundle\Translation\Translator;
+return static function (Container_Configurator $container): void {
     $services = $container->services();
-
-    $services
-        ->set(Translator::class)
-        ->decorate('translator.default', null, 256)
-        ->args([
-            service(TranslatorLoaderProviderInterface::class),
-            service(TranslatorResourceProviderInterface::class),
-            service('translator.formatter'),
-            '%kernel.default_locale%',
-            [
-                'cache_dir' => '%kernel.cache_dir%/translations',
-                'debug' => '%kernel.debug%',
-            ],
-        ])
-    ;
-
-    $services
-        ->set(ThemeAwareTranslator::class)
-        ->decorate(Translator::class, null, 256)
-        ->args([
-            service('.inner'),
-            service(ThemeContextInterface::class),
-        ])
-    ;
-
-    $services
-        ->set(TranslatorLoaderProviderInterface::class, TranslatorLoaderProvider::class)
-        ->args([
-            [], // loaders
-        ])
-    ;
-
-    $services->set(SymfonyTranslatorResourceProvider::class)->args([[]]);
-
-    $services
-        ->set(ThemeTranslatorResourceProvider::class)
-        ->args([
-            service(TranslationFilesFinderInterface::class),
-            service(ThemeRepositoryInterface::class),
-            service(ThemeHierarchyProviderInterface::class),
-        ])
-    ;
-
-    $services
-        ->set(TranslatorResourceProviderInterface::class, CompositeTranslatorResourceProvider::class)
-        ->args([
-            [
-                service(SymfonyTranslatorResourceProvider::class),
-                service(ThemeTranslatorResourceProvider::class),
-            ],
-        ])
-    ;
-
-    $services
-        ->set(TranslationFilesFinderInterface::class, TranslationFilesFinder::class)
-        ->args([
-            service(FinderFactoryInterface::class),
-        ])
-    ;
-
-    $services
-        ->set(OrderingTranslationFilesFinder::class)
-        ->decorate(TranslationFilesFinderInterface::class, null, -128)
-        ->args([
-            service('.inner'),
-        ])
-    ;
+    $services->set(Translator::class)->decorate('translator.default', null, 256)->args([service(Translator_Loader_Provider_Interface::class), service(Translator_Resource_Provider_Interface::class), service('translator.formatter'), '%kernel.default_locale%', ['cache_dir' => '%kernel.cache_dir%/translations', 'debug' => '%kernel.debug%']]);
+    $services->set(Theme_Aware_Translator::class)->decorate(Translator::class, null, 256)->args([service('.inner'), service(Theme_Context_Interface::class)]);
+    $services->set(Translator_Loader_Provider_Interface::class, Translator_Loader_Provider::class)->args([[]]);
+    $services->set(Symfony_Translator_Resource_Provider::class)->args([[]]);
+    $services->set(Theme_Translator_Resource_Provider::class)->args([service(Translation_Files_Finder_Interface::class), service(Theme_Repository_Interface::class), service(Theme_Hierarchy_Provider_Interface::class)]);
+    $services->set(Translator_Resource_Provider_Interface::class, Composite_Translator_Resource_Provider::class)->args([[service(Symfony_Translator_Resource_Provider::class), service(Theme_Translator_Resource_Provider::class)]]);
+    $services->set(Translation_Files_Finder_Interface::class, Translation_Files_Finder::class)->args([service(Finder_Factory_Interface::class)]);
+    $services->set(Ordering_Translation_Files_Finder::class)->decorate(Translation_Files_Finder_Interface::class, null, -128)->args([service('.inner')]);
 };

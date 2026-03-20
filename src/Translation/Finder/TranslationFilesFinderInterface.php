@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Finder;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Finder;
-
-interface TranslationFilesFinderInterface
+interface Translation_Files_Finder_Interface
 {
     /**
      * @return array Paths to translation files
      */
-    public function findTranslationFiles(string $path): array;
+    public function find_translation_files(string $path): array;
 }

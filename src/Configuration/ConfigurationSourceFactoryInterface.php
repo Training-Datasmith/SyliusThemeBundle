@@ -8,26 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Configuration;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Configuration;
-
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-
-interface ConfigurationSourceFactoryInterface
+use Symfony\Component\Config\Definition\Builder\Array_Node_Definition;
+use Symfony\Component\Dependency_Injection\Container_Builder;
+use Symfony\Component\Dependency_Injection\Definition;
+use Symfony\Component\Dependency_Injection\Reference;
+interface Configuration_Source_Factory_Interface
 {
-    public function buildConfiguration(ArrayNodeDefinition $node): void;
-
+    public function build_configuration(Array_Node_Definition $node): void;
     /**
      * @see ConfigurationProviderInterface
      *
      * @return Reference|Definition Configuration provider service
      */
-    public function initializeSource(ContainerBuilder $container, array $config);
-
-    public function getName(): string;
+    public function initialize_source(Container_Builder $container, array $config);
+    public function get_name(): string;
 }

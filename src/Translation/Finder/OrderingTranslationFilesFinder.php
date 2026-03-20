@@ -8,28 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Finder;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Finder;
-
-final readonly class OrderingTranslationFilesFinder implements TranslationFilesFinderInterface
+final readonly class Ordering_Translation_Files_Finder implements Translation_Files_Finder_Interface
 {
-    public function __construct(private TranslationFilesFinderInterface $translationFilesFinder)
+    public function __construct(private Translation_Files_Finder_Interface $translation_files_finder)
     {
     }
-
-    public function findTranslationFiles(string $path): array
+    public function find_translation_files(string $path): array
     {
-        $files = $this->translationFilesFinder->findTranslationFiles($path);
-
-        usort($files, static function (string $firstFile, string $secondFile) use ($path): int {
-            $firstFile = str_replace($path, '', $firstFile);
-            $secondFile = str_replace($path, '', $secondFile);
-
-            return (int) strpos($firstFile, 'translations') <=> (int) strpos($secondFile, 'translations');
+        $files = $this->translation_files_finder->find_translation_files($path);
+        usort($files, static function (string $first_file, string $second_file) use ($path): int {
+            $first_file = str_replace($path, '', $first_file);
+            $second_file = str_replace($path, '', $second_file);
+            return (int) strpos($first_file, 'translations') <=> (int) strpos($second_file, 'translations');
         });
-
         return $files;
     }
 }

@@ -8,63 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Finder;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Finder;
-
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Symfony\Component\Finder\SplFileInfo;
-
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Symfony\Component\Finder\Spl_File_Info;
 /**
  * @deprecated Deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.
  */
-final readonly class LegacyTranslationFilesFinder implements TranslationFilesFinderInterface
+final readonly class Legacy_Translation_Files_Finder implements Translation_Files_Finder_Interface
 {
-    public function __construct(private FinderFactoryInterface $finderFactory)
+    public function __construct(private Finder_Factory_Interface $finder_factory)
     {
-        @trigger_error(sprintf(
-            '"%s" is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.',
-            self::class,
-        ), \E_USER_DEPRECATED);
+        @trigger_error(sprintf('"%s" is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.', self::class), \E_USER_DEPRECATED);
     }
-
-    public function findTranslationFiles(string $path): array
+    public function find_translation_files(string $path): array
     {
-        $themeFiles = $this->getFiles($path);
-
-        $translationsFiles = [];
-        foreach ($themeFiles as $themeFile) {
-            $themeFilepath = (string) $themeFile;
-
-            if (!$this->isTranslationFile($themeFilepath)) {
+        $theme_files = $this->get_files($path);
+        $translations_files = [];
+        foreach ($theme_files as $theme_file) {
+            $theme_filepath = (string) $theme_file;
+            if (!$this->is_translation_file($theme_filepath)) {
                 continue;
             }
-
-            $translationsFiles[] = $themeFilepath;
+            $translations_files[] = $theme_filepath;
         }
-
-        return $translationsFiles;
+        return $translations_files;
     }
-
     /**
      * @return iterable|SplFileInfo[]
      */
-    private function getFiles(string $path): iterable
+    private function get_files(string $path): iterable
     {
-        $finder = $this->finderFactory->create();
-
-        $finder
-            ->ignoreUnreadableDirs()
-            ->in($path)
-        ;
-
+        $finder = $this->finder_factory->create();
+        $finder->ignore_unreadable_dirs()->in($path);
         return $finder;
     }
-
-    private function isTranslationFile(string $file): bool
+    private function is_translation_file(string $file): bool
     {
-        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) &&
-            (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
+        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) && (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
     }
 }

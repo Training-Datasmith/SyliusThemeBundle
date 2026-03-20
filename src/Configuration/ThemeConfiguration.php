@@ -8,124 +8,83 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Configuration;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Configuration;
-
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-final class ThemeConfiguration implements ConfigurationInterface
+use Symfony\Component\Config\Definition\Builder\Array_Node_Definition;
+use Symfony\Component\Config\Definition\Builder\Tree_Builder;
+use Symfony\Component\Config\Definition\Configuration_Interface;
+final class Theme_Configuration implements Configuration_Interface
 {
-    public function getConfigTreeBuilder(): TreeBuilder
+    public function get_config_tree_builder(): Tree_Builder
     {
-        $treeBuilder = new TreeBuilder('sylius_theme');
+        $tree_builder = new Tree_Builder('sylius_theme');
         /** @var ArrayNodeDefinition $rootNode */
-        $rootNode = $treeBuilder->getRootNode();
-
-        $rootNode->ignoreExtraKeys();
-
-        $this->addRequiredNameField($rootNode);
-        $this->addOptionalTitleField($rootNode);
-        $this->addOptionalDescriptionField($rootNode);
-        $this->addOptionalPathField($rootNode);
-        $this->addOptionalParentsList($rootNode);
-        $this->addOptionalScreenshotsList($rootNode);
-        $this->addOptionalAuthorsList($rootNode);
-
-        return $treeBuilder;
+        $root_node = $tree_builder->get_root_node();
+        $root_node->ignore_extra_keys();
+        $this->add_required_name_field($root_node);
+        $this->add_optional_title_field($root_node);
+        $this->add_optional_description_field($root_node);
+        $this->add_optional_path_field($root_node);
+        $this->add_optional_parents_list($root_node);
+        $this->add_optional_screenshots_list($root_node);
+        $this->add_optional_authors_list($root_node);
+        return $tree_builder;
     }
-
-    private function addRequiredNameField(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_required_name_field(Array_Node_Definition $root_node_definition): void
     {
-        $rootNodeDefinition->children()->scalarNode('name')->isRequired()->cannotBeEmpty();
+        $root_node_definition->children()->scalar_node('name')->is_required()->cannot_be_empty();
     }
-
-    private function addOptionalTitleField(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_title_field(Array_Node_Definition $root_node_definition): void
     {
-        $rootNodeDefinition->children()->scalarNode('title')->cannotBeEmpty();
+        $root_node_definition->children()->scalar_node('title')->cannot_be_empty();
     }
-
-    private function addOptionalDescriptionField(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_description_field(Array_Node_Definition $root_node_definition): void
     {
-        $rootNodeDefinition->children()->scalarNode('description')->cannotBeEmpty();
+        $root_node_definition->children()->scalar_node('description')->cannot_be_empty();
     }
-
-    private function addOptionalPathField(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_path_field(Array_Node_Definition $root_node_definition): void
     {
-        $rootNodeDefinition->children()->scalarNode('path')->cannotBeEmpty();
+        $root_node_definition->children()->scalar_node('path')->cannot_be_empty();
     }
-
-    private function addOptionalParentsList(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_parents_list(Array_Node_Definition $root_node_definition): void
     {
-        $parentsNodeDefinition = $rootNodeDefinition->children()->arrayNode('parents');
-        $parentsNodeDefinition
-            ->requiresAtLeastOneElement()
-            ->performNoDeepMerging()
-                ->scalarPrototype()
-                ->cannotBeEmpty()
-        ;
+        $parents_node_definition = $root_node_definition->children()->array_node('parents');
+        $parents_node_definition->requires_at_least_one_element()->perform_no_deep_merging()->scalar_prototype()->cannot_be_empty();
     }
-
-    private function addOptionalScreenshotsList(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_screenshots_list(Array_Node_Definition $root_node_definition): void
     {
-        $screenshotsNodeDefinition = $rootNodeDefinition->children()->arrayNode('screenshots');
-        $screenshotsNodeDefinition
-            ->requiresAtLeastOneElement()
-            ->performNoDeepMerging()
-        ;
-
+        $screenshots_node_definition = $root_node_definition->children()->array_node('screenshots');
+        $screenshots_node_definition->requires_at_least_one_element()->perform_no_deep_merging();
         /** @var ArrayNodeDefinition $screenshotNodeDefinition */
-        $screenshotNodeDefinition = $screenshotsNodeDefinition->arrayPrototype();
-
-        $screenshotNodeDefinition
-            ->validate()
-                ->ifTrue(
-                    /** @param mixed $screenshot */
-                    fn ($screenshot): bool => [] === $screenshot || ['path' => ''] === $screenshot,
-                )
-                ->thenInvalid('Screenshot cannot be empty!')
-        ;
-        $screenshotNodeDefinition
-            ->beforeNormalization()
-                ->ifString()
-                ->then(
-                    /** @param mixed $value */
-                    fn ($value): array => ['path' => $value],
-                )
-        ;
-
-        $screenshotNodeBuilder = $screenshotNodeDefinition->children();
-        $screenshotNodeBuilder->scalarNode('path')->isRequired();
-        $screenshotNodeBuilder->scalarNode('title')->cannotBeEmpty();
-        $screenshotNodeBuilder->scalarNode('description')->cannotBeEmpty();
+        $screenshot_node_definition = $screenshots_node_definition->array_prototype();
+        $screenshot_node_definition->validate()->if_true(
+            /** @param mixed $screenshot */
+            fn($screenshot): bool => [] === $screenshot || ['path' => ''] === $screenshot
+        )->then_invalid('Screenshot cannot be empty!');
+        $screenshot_node_definition->before_normalization()->if_string()->then(
+            /** @param mixed $value */
+            fn($value): array => ['path' => $value]
+        );
+        $screenshot_node_builder = $screenshot_node_definition->children();
+        $screenshot_node_builder->scalar_node('path')->is_required();
+        $screenshot_node_builder->scalar_node('title')->cannot_be_empty();
+        $screenshot_node_builder->scalar_node('description')->cannot_be_empty();
     }
-
-    private function addOptionalAuthorsList(ArrayNodeDefinition $rootNodeDefinition): void
+    private function add_optional_authors_list(Array_Node_Definition $root_node_definition): void
     {
-        $authorsNodeDefinition = $rootNodeDefinition->children()->arrayNode('authors');
-        $authorsNodeDefinition
-            ->requiresAtLeastOneElement()
-            ->performNoDeepMerging()
-        ;
-
+        $authors_node_definition = $root_node_definition->children()->array_node('authors');
+        $authors_node_definition->requires_at_least_one_element()->perform_no_deep_merging();
         /** @var ArrayNodeDefinition $authorNodeDefinition */
-        $authorNodeDefinition = $authorsNodeDefinition->arrayPrototype();
-        $authorNodeDefinition
-            ->validate()
-                ->ifTrue(
-                    /** @param mixed $author */
-                    fn ($author): bool => [] === $author,
-                )
-                ->thenInvalid('Author cannot be empty!')
-        ;
-
-        $authorNodeBuilder = $authorNodeDefinition->children();
-        $authorNodeBuilder->scalarNode('name')->cannotBeEmpty();
-        $authorNodeBuilder->scalarNode('email')->cannotBeEmpty();
-        $authorNodeBuilder->scalarNode('homepage')->cannotBeEmpty();
-        $authorNodeBuilder->scalarNode('role')->cannotBeEmpty();
+        $author_node_definition = $authors_node_definition->array_prototype();
+        $author_node_definition->validate()->if_true(
+            /** @param mixed $author */
+            fn($author): bool => [] === $author
+        )->then_invalid('Author cannot be empty!');
+        $author_node_builder = $author_node_definition->children();
+        $author_node_builder->scalar_node('name')->cannot_be_empty();
+        $author_node_builder->scalar_node('email')->cannot_be_empty();
+        $author_node_builder->scalar_node('homepage')->cannot_be_empty();
+        $author_node_builder->scalar_node('role')->cannot_be_empty();
     }
 }

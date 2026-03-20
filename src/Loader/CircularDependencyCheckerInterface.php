@@ -8,17 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Loader;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Loader;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-interface CircularDependencyCheckerInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+interface Circular_Dependency_Checker_Interface
 {
     /**
      * @throws CircularDependencyFoundException
      */
-    public function check(ThemeInterface $theme): void;
+    public function check(Theme_Interface $theme): void;
 }

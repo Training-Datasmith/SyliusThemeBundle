@@ -8,18 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Resource;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Resource;
-
-interface TranslationResourceInterface
+interface Translation_Resource_Interface
 {
-    public function getName(): string;
-
-    public function getLocale(): string;
-
-    public function getFormat(): string;
-
-    public function getDomain(): string;
+    public function get_name(): string;
+    public function get_locale(): string;
+    public function get_format(): string;
+    public function get_domain(): string;
 }

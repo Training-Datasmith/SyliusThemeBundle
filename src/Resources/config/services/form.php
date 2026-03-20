@@ -8,26 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Symfony\Component\Dependency_Injection\Loader\Configurator;
 
-declare(strict_types=1);
-
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-use Sylius\Bundle\ThemeBundle\Form\Type\ThemeChoiceType;
-use Sylius\Bundle\ThemeBundle\Form\Type\ThemeNameChoiceType;
-
-return static function (ContainerConfigurator $container): void {
+use Sylius\Bundle\Theme_Bundle\Form\Type\Theme_Choice_Type;
+use Sylius\Bundle\Theme_Bundle\Form\Type\Theme_Name_Choice_Type;
+return static function (Container_Configurator $container): void {
     $services = $container->services();
-
-    $services
-        ->set(ThemeChoiceType::class)
-        ->args([service('sylius.repository.theme')])
-        ->tag('form.type')
-    ;
-
-    $services
-        ->set(ThemeNameChoiceType::class)
-        ->args([service('sylius.repository.theme')])
-        ->tag('form.type')
-    ;
+    $services->set(Theme_Choice_Type::class)->args([service('sylius.repository.theme')])->tag('form.type');
+    $services->set(Theme_Name_Choice_Type::class)->args([service('sylius.repository.theme')])->tag('form.type');
 };

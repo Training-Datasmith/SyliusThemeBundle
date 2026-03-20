@@ -8,61 +8,45 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Finder;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Finder;
-
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
-use Symfony\Component\Finder\SplFileInfo;
-
-final readonly class TranslationFilesFinder implements TranslationFilesFinderInterface
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Symfony\Component\Finder\Exception\Directory_Not_Found_Exception;
+use Symfony\Component\Finder\Spl_File_Info;
+final readonly class Translation_Files_Finder implements Translation_Files_Finder_Interface
 {
-    public function __construct(private FinderFactoryInterface $finderFactory)
+    public function __construct(private Finder_Factory_Interface $finder_factory)
     {
     }
-
-    public function findTranslationFiles(string $path): array
+    public function find_translation_files(string $path): array
     {
-        $themeFiles = $this->getFiles($path);
-
-        $translationsFiles = [];
-        foreach ($themeFiles as $themeFile) {
-            $themeFilepath = (string) $themeFile;
-
-            if (!$this->isTranslationFile($themeFilepath)) {
+        $theme_files = $this->get_files($path);
+        $translations_files = [];
+        foreach ($theme_files as $theme_file) {
+            $theme_filepath = (string) $theme_file;
+            if (!$this->is_translation_file($theme_filepath)) {
                 continue;
             }
-
-            $translationsFiles[] = $themeFilepath;
+            $translations_files[] = $theme_filepath;
         }
-
-        return $translationsFiles;
+        return $translations_files;
     }
-
     /**
      * @return iterable|SplFileInfo[]
      */
-    private function getFiles(string $path): iterable
+    private function get_files(string $path): iterable
     {
         try {
-            $finder = $this->finderFactory->create();
-
-            $finder
-                ->ignoreUnreadableDirs()
-                ->in($path . '/translations')
-            ;
-
+            $finder = $this->finder_factory->create();
+            $finder->ignore_unreadable_dirs()->in($path . '/translations');
             return $finder;
-        } catch (DirectoryNotFoundException) {
+        } catch (Directory_Not_Found_Exception) {
             return [];
         }
     }
-
-    private function isTranslationFile(string $file): bool
+    private function is_translation_file(string $file): bool
     {
-        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) &&
-            (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
+        return str_contains($file, 'translations' . \DIRECTORY_SEPARATOR) && (bool) preg_match('/^[^\.]+?\.[a-zA-Z_]{2,}?\.[a-z0-9]{2,}?$/', basename($file));
     }
 }

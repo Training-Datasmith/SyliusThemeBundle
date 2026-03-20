@@ -8,42 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Model;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Model;
-
-final class ThemeScreenshot
+final class Theme_Screenshot
 {
     private ?string $title = null;
-
     private ?string $description = null;
-
     public function __construct(private readonly string $path)
     {
     }
-
-    public function getPath(): string
+    public function get_path(): string
     {
         return $this->path;
     }
-
-    public function getTitle(): ?string
+    public function get_title(): ?string
     {
         return $this->title;
     }
-
-    public function setTitle(?string $title): void
+    public function set_title(?string $title): void
     {
         $this->title = $title;
     }
-
-    public function getDescription(): ?string
+    public function get_description(): ?string
     {
         return $this->description;
     }
-
-    public function setDescription(?string $description): void
+    public function set_description(?string $description): void
     {
         $this->description = $description;
     }

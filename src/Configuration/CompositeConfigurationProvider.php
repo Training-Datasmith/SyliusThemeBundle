@@ -8,30 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Configuration;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Configuration;
-
-final readonly class CompositeConfigurationProvider implements ConfigurationProviderInterface
+final readonly class Composite_Configuration_Provider implements Configuration_Provider_Interface
 {
     /**
      * @param ConfigurationProviderInterface[] $configurationProviders
      */
-    public function __construct(private array $configurationProviders)
+    public function __construct(private array $configuration_providers)
     {
     }
-
-    public function getConfigurations(): array
+    public function get_configurations(): array
     {
         $configurations = [];
-        foreach ($this->configurationProviders as $configurationProvider) {
-            $configurations = array_merge(
-                $configurations,
-                $configurationProvider->getConfigurations(),
-            );
+        foreach ($this->configuration_providers as $configuration_provider) {
+            $configurations = array_merge($configurations, $configuration_provider->get_configurations());
         }
-
         return $configurations;
     }
 }

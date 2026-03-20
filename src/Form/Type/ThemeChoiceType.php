@@ -8,42 +8,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Form\Type;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Form\Type;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-use Sylius\Bundle\ThemeBundle\Repository\ThemeRepositoryInterface;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-final class ThemeChoiceType extends AbstractType
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+use Sylius\Bundle\Theme_Bundle\Repository\Theme_Repository_Interface;
+use Symfony\Component\Form\Abstract_Type;
+use Symfony\Component\Form\Extension\Core\Type\Choice_Type;
+use Symfony\Component\Options_Resolver\Options;
+use Symfony\Component\Options_Resolver\Options_Resolver;
+final class Theme_Choice_Type extends Abstract_Type
 {
-    public function __construct(private readonly ThemeRepositoryInterface $themeRepository)
+    public function __construct(private readonly Theme_Repository_Interface $theme_repository)
     {
     }
-
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configure_options(Options_Resolver $resolver): void
     {
-        $resolver->setDefaults([
-            'choices' => fn (Options $options): array => $this->themeRepository->findAll(),
-            'choice_label' => function (ThemeInterface $theme): string {
-                $title = $theme->getTitle();
-
-                return $title ?? $theme->getName();
-            },
-        ]);
+        $resolver->set_defaults(['choices' => fn(Options $options): array => $this->theme_repository->find_all(), 'choice_label' => function (Theme_Interface $theme): string {
+            $title = $theme->get_title();
+            return $title ?? $theme->get_name();
+        }]);
     }
-
-    public function getParent(): string
+    public function get_parent(): string
     {
-        return ChoiceType::class;
+        return Choice_Type::class;
     }
-
-    public function getBlockPrefix(): string
+    public function get_block_prefix(): string
     {
         return 'sylius_theme_choice';
     }

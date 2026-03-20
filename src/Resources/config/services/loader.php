@@ -8,62 +8,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Symfony\Component\Dependency_Injection\Loader\Configurator;
 
-declare(strict_types=1);
-
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationProviderInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeAuthorFactory;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeAuthorFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeFactory;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeScreenshotFactory;
-use Sylius\Bundle\ThemeBundle\Factory\ThemeScreenshotFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Loader\CircularDependencyChecker;
-use Sylius\Bundle\ThemeBundle\Loader\CircularDependencyCheckerInterface;
-use Sylius\Bundle\ThemeBundle\Loader\ThemeLoader;
-use Sylius\Bundle\ThemeBundle\Loader\ThemeLoaderInterface;
-
-return static function (ContainerConfigurator $container): void {
+use Sylius\Bundle\Theme_Bundle\Configuration\Configuration_Provider_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Author_Factory;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Author_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Factory;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Screenshot_Factory;
+use Sylius\Bundle\Theme_Bundle\Factory\Theme_Screenshot_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Loader\Circular_Dependency_Checker;
+use Sylius\Bundle\Theme_Bundle\Loader\Circular_Dependency_Checker_Interface;
+use Sylius\Bundle\Theme_Bundle\Loader\Theme_Loader;
+use Sylius\Bundle\Theme_Bundle\Loader\Theme_Loader_Interface;
+return static function (Container_Configurator $container): void {
     $services = $container->services();
-
-    $services->set(ThemeFactoryInterface::class, ThemeFactory::class);
-    $services
-        ->alias('sylius.factory.theme', ThemeFactoryInterface::class)
-        ->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.')
-    ;
-
-    $services->set(ThemeAuthorFactoryInterface::class, ThemeAuthorFactory::class);
-    $services
-        ->alias('sylius.factory.theme_author', ThemeAuthorFactoryInterface::class)
-        ->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.')
-    ;
-
-    $services->set(ThemeScreenshotFactoryInterface::class, ThemeScreenshotFactory::class);
-    $services
-        ->alias('sylius.factory.theme_screenshot', ThemeScreenshotFactoryInterface::class)
-        ->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.')
-    ;
-
-    $services->set(CircularDependencyCheckerInterface::class, CircularDependencyChecker::class);
-    $services
-        ->alias('sylius.theme.circular_dependency_checker', CircularDependencyCheckerInterface::class)
-        ->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.')
-    ;
-
-    $services
-        ->set(ThemeLoaderInterface::class, ThemeLoader::class)
-        ->args([
-            service(ConfigurationProviderInterface::class),
-            service(ThemeFactoryInterface::class),
-            service(ThemeAuthorFactoryInterface::class),
-            service(ThemeScreenshotFactoryInterface::class),
-            service(CircularDependencyCheckerInterface::class),
-        ])
-    ;
-    $services
-        ->alias('sylius.theme.loader', ThemeLoaderInterface::class)
-        ->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.')
-    ;
+    $services->set(Theme_Factory_Interface::class, Theme_Factory::class);
+    $services->alias('sylius.factory.theme', Theme_Factory_Interface::class)->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.');
+    $services->set(Theme_Author_Factory_Interface::class, Theme_Author_Factory::class);
+    $services->alias('sylius.factory.theme_author', Theme_Author_Factory_Interface::class)->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.');
+    $services->set(Theme_Screenshot_Factory_Interface::class, Theme_Screenshot_Factory::class);
+    $services->alias('sylius.factory.theme_screenshot', Theme_Screenshot_Factory_Interface::class)->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.');
+    $services->set(Circular_Dependency_Checker_Interface::class, Circular_Dependency_Checker::class);
+    $services->alias('sylius.theme.circular_dependency_checker', Circular_Dependency_Checker_Interface::class)->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.');
+    $services->set(Theme_Loader_Interface::class, Theme_Loader::class)->args([service(Configuration_Provider_Interface::class), service(Theme_Factory_Interface::class), service(Theme_Author_Factory_Interface::class), service(Theme_Screenshot_Factory_Interface::class), service(Circular_Dependency_Checker_Interface::class)]);
+    $services->alias('sylius.theme.loader', Theme_Loader_Interface::class)->deprecate('sylius/theme-bundle', '2.0', '"%alias_id%" service is deprecated since Sylius/ThemeBundle 2.0 and will be removed in 3.0.');
 };

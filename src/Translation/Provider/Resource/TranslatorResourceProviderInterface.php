@@ -8,22 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Provider\Resource;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Resource;
-
-use Sylius\Bundle\ThemeBundle\Translation\Resource\TranslationResourceInterface;
-
-interface TranslatorResourceProviderInterface
+use Sylius\Bundle\Theme_Bundle\Translation\Resource\Translation_Resource_Interface;
+interface Translator_Resource_Provider_Interface
 {
     /**
      * @return array|TranslationResourceInterface[]
      */
-    public function getResources(): array;
-
+    public function get_resources(): array;
     /**
      * @return array|string[]
      */
-    public function getResourcesLocales(): array;
+    public function get_resources_locales(): array;
 }

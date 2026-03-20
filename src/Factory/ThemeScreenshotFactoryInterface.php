@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Factory;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Factory;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeScreenshot;
-
-interface ThemeScreenshotFactoryInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Screenshot;
+interface Theme_Screenshot_Factory_Interface
 {
-    public function createFromArray(array $data): ThemeScreenshot;
+    public function create_from_array(array $data): Theme_Screenshot;
 }

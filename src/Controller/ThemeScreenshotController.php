@@ -8,55 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Controller;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Controller;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-use Sylius\Bundle\ThemeBundle\Repository\ThemeRepositoryInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-final readonly class ThemeScreenshotController
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+use Sylius\Bundle\Theme_Bundle\Repository\Theme_Repository_Interface;
+use Symfony\Component\Http_Foundation\Binary_File_Response;
+use Symfony\Component\Http_Foundation\File\Exception\File_Not_Found_Exception;
+use Symfony\Component\Http_Foundation\Response;
+use Symfony\Component\Http_Kernel\Exception\Not_Found_Http_Exception;
+final readonly class Theme_Screenshot_Controller
 {
-    public function __construct(private ThemeRepositoryInterface $themeRepository)
+    public function __construct(private Theme_Repository_Interface $theme_repository)
     {
     }
-
-    public function streamScreenshotAction(string $themeName, int $screenshotNumber): Response
+    public function stream_screenshot_action(string $theme_name, int $screenshot_number): Response
     {
-        $screenshotPath = $this->getScreenshotPath($this->getTheme($themeName), $screenshotNumber);
-
+        $screenshot_path = $this->get_screenshot_path($this->get_theme($theme_name), $screenshot_number);
         try {
-            return new BinaryFileResponse($screenshotPath);
-        } catch (FileNotFoundException $exception) {
-            throw new NotFoundHttpException(sprintf('Screenshot "%s" does not exist', $screenshotPath), $exception);
+            return new Binary_File_Response($screenshot_path);
+        } catch (File_Not_Found_Exception $exception) {
+            throw new Not_Found_Http_Exception(sprintf('Screenshot "%s" does not exist', $screenshot_path), $exception);
         }
     }
-
-    private function getScreenshotPath(ThemeInterface $theme, int $screenshotNumber): string
+    private function get_screenshot_path(Theme_Interface $theme, int $screenshot_number): string
     {
-        $screenshots = $theme->getScreenshots();
-
-        if (!isset($screenshots[$screenshotNumber])) {
-            throw new NotFoundHttpException(sprintf('Theme "%s" does not have screenshot #%d', $theme->getTitle() ?? $theme->getName(), $screenshotNumber));
+        $screenshots = $theme->get_screenshots();
+        if (!isset($screenshots[$screenshot_number])) {
+            throw new Not_Found_Http_Exception(sprintf('Theme "%s" does not have screenshot #%d', $theme->get_title() ?? $theme->get_name(), $screenshot_number));
         }
-
-        $screenshotRelativePath = $screenshots[$screenshotNumber]->getPath();
-
-        return rtrim($theme->getPath(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $screenshotRelativePath;
+        $screenshot_relative_path = $screenshots[$screenshot_number]->get_path();
+        return rtrim($theme->get_path(), \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR . $screenshot_relative_path;
     }
-
-    private function getTheme(string $themeName): ThemeInterface
+    private function get_theme(string $theme_name): Theme_Interface
     {
-        $theme = $this->themeRepository->findOneByName($themeName);
+        $theme = $this->theme_repository->find_one_by_name($theme_name);
         if (null === $theme) {
-            throw new NotFoundHttpException(sprintf('Theme with name "%s" not found', $themeName));
+            throw new Not_Found_Http_Exception(sprintf('Theme with name "%s" not found', $theme_name));
         }
-
         return $theme;
     }
 }

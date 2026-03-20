@@ -8,19 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Symfony\Component\Dependency_Injection\Loader\Configurator;
 
-declare(strict_types=1);
-
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactory;
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Filesystem\Filesystem;
-use Sylius\Bundle\ThemeBundle\Filesystem\FilesystemInterface;
-
-return static function (ContainerConfigurator $container): void {
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory;
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Filesystem\Filesystem;
+use Sylius\Bundle\Theme_Bundle\Filesystem\Filesystem_Interface;
+return static function (Container_Configurator $container): void {
     $services = $container->services();
-
-    $services->set(FilesystemInterface::class, Filesystem::class);
-    $services->set(FinderFactoryInterface::class, FinderFactory::class);
+    $services->set(Filesystem_Interface::class, Filesystem::class);
+    $services->set(Finder_Factory_Interface::class, Finder_Factory::class);
 };

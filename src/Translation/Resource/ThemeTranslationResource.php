@@ -8,52 +8,38 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Resource;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Resource;
-
-use Sylius\Bundle\ThemeBundle\Model\ThemeInterface;
-
-final readonly class ThemeTranslationResource implements TranslationResourceInterface
+use Sylius\Bundle\Theme_Bundle\Model\Theme_Interface;
+final readonly class Theme_Translation_Resource implements Translation_Resource_Interface
 {
     private string $locale;
-
     private string $format;
-
     private string $domain;
-
-    public function __construct(ThemeInterface $theme, private string $name)
+    public function __construct(Theme_Interface $theme, private string $name)
     {
         $parts = explode('.', basename($this->name), 3);
         if (3 !== count($parts)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not create a translation resource with filepath "%s".',
-                $this->name,
-            ));
+            throw new \InvalidArgumentException(sprintf('Could not create a translation resource with filepath "%s".', $this->name));
         }
-
         $this->domain = $parts[0];
-        $this->locale = $parts[1] . '@' . str_replace('/', '-', $theme->getName());
+        $this->locale = $parts[1] . '@' . str_replace('/', '-', $theme->get_name());
         $this->format = $parts[2];
     }
-
-    public function getName(): string
+    public function get_name(): string
     {
         return $this->name;
     }
-
-    public function getLocale(): string
+    public function get_locale(): string
     {
         return $this->locale;
     }
-
-    public function getFormat(): string
+    public function get_format(): string
     {
         return $this->format;
     }
-
-    public function getDomain(): string
+    public function get_domain(): string
     {
         return $this->domain;
     }

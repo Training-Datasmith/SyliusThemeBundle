@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Provider\Loader;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Loader;
-
-interface TranslatorLoaderProviderInterface
+interface Translator_Loader_Provider_Interface
 {
     /**
      * @return array Format => Loader
      */
-    public function getLoaders(): array;
+    public function get_loaders(): array;
 }

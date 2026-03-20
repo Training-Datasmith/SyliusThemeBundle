@@ -8,14 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Translation\Provider\Loader;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Translation\Provider\Loader;
-
-use Symfony\Component\Translation\Loader\LoaderInterface;
-
-final readonly class TranslatorLoaderProvider implements TranslatorLoaderProviderInterface
+use Symfony\Component\Translation\Loader\Loader_Interface;
+final readonly class Translator_Loader_Provider implements Translator_Loader_Provider_Interface
 {
     /**
      * @param LoaderInterface[] $loaders
@@ -23,8 +20,7 @@ final readonly class TranslatorLoaderProvider implements TranslatorLoaderProvide
     public function __construct(private array $loaders = [])
     {
     }
-
-    public function getLoaders(): array
+    public function get_loaders(): array
     {
         return $this->loaders;
     }

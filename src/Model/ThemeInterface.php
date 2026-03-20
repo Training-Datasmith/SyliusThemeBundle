@@ -8,49 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Model;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Model;
-
-interface ThemeInterface
+interface Theme_Interface
 {
-    public function getName(): string;
-
-    public function getPath(): string;
-
-    public function getTitle(): ?string;
-
-    public function setTitle(?string $title): void;
-
-    public function getDescription(): ?string;
-
-    public function setDescription(?string $description): void;
-
+    public function get_name(): string;
+    public function get_path(): string;
+    public function get_title(): ?string;
+    public function set_title(?string $title): void;
+    public function get_description(): ?string;
+    public function set_description(?string $description): void;
     /**
      * @return array|ThemeAuthor[]
      */
-    public function getAuthors(): array;
-
-    public function addAuthor(ThemeAuthor $author): void;
-
-    public function removeAuthor(ThemeAuthor $author): void;
-
+    public function get_authors(): array;
+    public function add_author(Theme_Author $author): void;
+    public function remove_author(Theme_Author $author): void;
     /**
      * @return array|ThemeInterface[]
      */
-    public function getParents(): array;
-
-    public function addParent(self $theme): void;
-
-    public function removeParent(self $theme): void;
-
+    public function get_parents(): array;
+    public function add_parent(self $theme): void;
+    public function remove_parent(self $theme): void;
     /**
      * @return array|ThemeScreenshot[]
      */
-    public function getScreenshots(): array;
-
-    public function addScreenshot(ThemeScreenshot $screenshot): void;
-
-    public function removeScreenshot(ThemeScreenshot $screenshot): void;
+    public function get_screenshots(): array;
+    public function add_screenshot(Theme_Screenshot $screenshot): void;
+    public function remove_screenshot(Theme_Screenshot $screenshot): void;
 }

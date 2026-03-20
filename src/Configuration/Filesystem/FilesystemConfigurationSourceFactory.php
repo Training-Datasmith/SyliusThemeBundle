@@ -8,71 +8,34 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+declare (strict_types=1);
+namespace Sylius\Bundle\Theme_Bundle\Configuration\Filesystem;
 
-declare(strict_types=1);
-
-namespace Sylius\Bundle\ThemeBundle\Configuration\Filesystem;
-
-use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationProcessorInterface;
-use Sylius\Bundle\ThemeBundle\Configuration\ConfigurationSourceFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Factory\FinderFactoryInterface;
-use Sylius\Bundle\ThemeBundle\Filesystem\FilesystemInterface;
-use Sylius\Bundle\ThemeBundle\Locator\RecursiveFileLocator;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-
-final class FilesystemConfigurationSourceFactory implements ConfigurationSourceFactoryInterface
+use Sylius\Bundle\Theme_Bundle\Configuration\Configuration_Processor_Interface;
+use Sylius\Bundle\Theme_Bundle\Configuration\Configuration_Source_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Factory\Finder_Factory_Interface;
+use Sylius\Bundle\Theme_Bundle\Filesystem\Filesystem_Interface;
+use Sylius\Bundle\Theme_Bundle\Locator\Recursive_File_Locator;
+use Symfony\Component\Config\Definition\Builder\Array_Node_Definition;
+use Symfony\Component\Dependency_Injection\Container_Builder;
+use Symfony\Component\Dependency_Injection\Definition;
+use Symfony\Component\Dependency_Injection\Reference;
+final class Filesystem_Configuration_Source_Factory implements Configuration_Source_Factory_Interface
 {
-    public function buildConfiguration(ArrayNodeDefinition $node): void
+    public function build_configuration(Array_Node_Definition $node): void
     {
-        $filesystemNode = $node->fixXmlConfig('directory', 'directories')->children();
-
-        $filesystemNode
-            ->scalarNode('filename')
-                ->defaultValue('composer.json')
-                ->cannotBeEmpty()
-        ;
-
-        $filesystemNode
-            ->scalarNode('scan_depth')
-                ->info('Restrict depth to scan for configuration file inside theme folder')
-                ->defaultValue(1)
-        ;
-
-        $filesystemNode
-            ->arrayNode('directories')
-                ->defaultValue(['%kernel.project_dir%/themes'])
-                ->requiresAtLeastOneElement()
-                ->performNoDeepMerging()
-                ->prototype('scalar')
-        ;
+        $filesystem_node = $node->fix_xml_config('directory', 'directories')->children();
+        $filesystem_node->scalar_node('filename')->default_value('composer.json')->cannot_be_empty();
+        $filesystem_node->scalar_node('scan_depth')->info('Restrict depth to scan for configuration file inside theme folder')->default_value(1);
+        $filesystem_node->array_node('directories')->default_value(['%kernel.project_dir%/themes'])->requires_at_least_one_element()->perform_no_deep_merging()->prototype('scalar');
     }
-
-    public function initializeSource(ContainerBuilder $container, array $config): Definition
+    public function initialize_source(Container_Builder $container, array $config): Definition
     {
-        $recursiveFileLocator = new Definition(RecursiveFileLocator::class, [
-            new Reference(FinderFactoryInterface::class),
-            $config['directories'],
-            $config['scan_depth'],
-        ]);
-
-        $configurationLoader = new Definition(ProcessingConfigurationLoader::class, [
-            new Definition(JsonFileConfigurationLoader::class, [
-                new Reference(FilesystemInterface::class),
-            ]),
-            new Reference(ConfigurationProcessorInterface::class),
-        ]);
-
-        return new Definition(FilesystemConfigurationProvider::class, [
-            $recursiveFileLocator,
-            $configurationLoader,
-            $config['filename'],
-        ]);
+        $recursive_file_locator = new Definition(Recursive_File_Locator::class, [new Reference(Finder_Factory_Interface::class), $config['directories'], $config['scan_depth']]);
+        $configuration_loader = new Definition(Processing_Configuration_Loader::class, [new Definition(Json_File_Configuration_Loader::class, [new Reference(Filesystem_Interface::class)]), new Reference(Configuration_Processor_Interface::class)]);
+        return new Definition(Filesystem_Configuration_Provider::class, [$recursive_file_locator, $configuration_loader, $config['filename']]);
     }
-
-    public function getName(): string
+    public function get_name(): string
     {
         return 'filesystem';
     }
