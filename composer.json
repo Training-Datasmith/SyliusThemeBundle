@@ -65,13 +65,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Sylius\\Bundle\\ThemeBundle\\": "src/"
+            "Sylius\\Bundle\\Theme_Bundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\Sylius\\Bundle\\ThemeBundle\\": "spec/",
-            "Sylius\\Bundle\\ThemeBundle\\Tests\\": "tests/"
+            "spec\\Sylius\\Bundle\\Theme_Bundle\\": "spec/",
+            "Sylius\\Bundle\\Theme_Bundle\\Tests\\": "tests/"
         }
     },
     "scripts": {
